@@ -44,6 +44,7 @@ namespace Sport_A_Lyzer.GoalOperations
 
 		private async Task<Goals> GetOrCreateGoal( Guid goalId )
 		{
+			//Just a comment
 			var goal = await _context.Goals.SingleOrDefaultAsync( g => g.Id == goalId );
 
 			if ( goal != null )
