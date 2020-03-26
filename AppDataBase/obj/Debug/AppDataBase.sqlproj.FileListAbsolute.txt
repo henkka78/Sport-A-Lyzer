@@ -1,5 +1,0 @@
-C:\Users\henri.leppa\Source\Repos\Sport-A-Lyzer\AppDataBase\bin\Debug\AppDataBase.dacpac
-C:\Users\henri.leppa\Source\Repos\Sport-A-Lyzer\AppDataBase\bin\Debug\AppDataBase.dll
-C:\Users\henri.leppa\Source\Repos\Sport-A-Lyzer\AppDataBase\bin\Debug\AppDataBase.pdb
-C:\Users\henri.leppa\Source\Repos\Sport-A-Lyzer\AppDataBase\obj\Debug\AppDataBase.dll
-C:\Users\henri.leppa\Source\Repos\Sport-A-Lyzer\AppDataBase\obj\Debug\AppDataBase.pdb
