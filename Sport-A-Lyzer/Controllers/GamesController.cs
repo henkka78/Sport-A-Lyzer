@@ -16,18 +16,21 @@ namespace Sport_A_Lyzer.Controllers
 		private readonly ICommandHandler<DeleteGameCommand> _deleteGameCommandHandler;
 		private readonly IQueryHandler<GetGameQuery, GameResponse> _getGameQueryHandler;
 		private readonly IQueryHandler<GetGamesGoalStatsQuery, ICollection<GoalStatsResponse>> _getGamesGoalStatsQueryHandler;
+		private readonly ICommandHandler<UpsertGoalCommand> _upsertGoalCommandHandler;
 
 		public GamesController( 
 			ICommandHandler<UpsertGameCommand> upsertGameCommandHandler,
 			ICommandHandler<DeleteGameCommand> deleteGameCommandHandler,
 			IQueryHandler<GetGameQuery, GameResponse> getGameQueryHandler,
-			IQueryHandler<GetGamesGoalStatsQuery, ICollection<GoalStatsResponse>> getGamesGoalStatsQueryHandler
+			IQueryHandler<GetGamesGoalStatsQuery, ICollection<GoalStatsResponse>> getGamesGoalStatsQueryHandler,
+			ICommandHandler<UpsertGoalCommand> upsertGoalCommandHandler
 			)
 		{
 			_upsertGameCommandHandler = upsertGameCommandHandler;
 			_deleteGameCommandHandler = deleteGameCommandHandler;
 			_getGameQueryHandler = getGameQueryHandler;
 			_getGamesGoalStatsQueryHandler = getGamesGoalStatsQueryHandler;
+			_upsertGoalCommandHandler = upsertGoalCommandHandler;
 		}
 
 		[Route("games/{gameId}")]
@@ -64,6 +67,15 @@ namespace Sport_A_Lyzer.Controllers
 			var query=new GetGamesGoalStatsQuery(gameId);
 			var stats = await _getGamesGoalStatsQueryHandler.HandleAsync(query);
 			return Ok( stats );
+		}
+
+		[Route( "goal/{goalId}" )]
+		[HttpPost]
+		public async Task<ActionResult> PostGoalAsync( Guid goalId, [FromBody]UpsertGoalRequest request )
+		{
+			var command = new UpsertGoalCommand(goalId, request);
+			await _upsertGoalCommandHandler.HandleAsync(command);
+			return Ok();
 		}
 	}
 }

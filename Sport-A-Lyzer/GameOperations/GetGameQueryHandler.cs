@@ -18,7 +18,7 @@ namespace Sport_A_Lyzer.GameOperations
 		}
 		public async Task<GameResponse> HandleAsync( GetGameQuery query )
 		{
-			return await _context.Games
+			var result= await _context.Games
 				.Where(g => g.Id == query.GameId)
 				.Include(g => g.AwayTeam)
 				.Include(g => g.HomeTeam)
@@ -28,6 +28,8 @@ namespace Sport_A_Lyzer.GameOperations
 					HomeTeam = g.HomeTeam.Name,
 					AwayTeam = g.AwayTeam.Name
 				}).FirstOrDefaultAsync();
+
+			return result;
 		}
 	}
 }

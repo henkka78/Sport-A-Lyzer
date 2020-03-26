@@ -14,6 +14,6 @@ namespace Sport_A_Lyzer.GoalOperations
 		public Guid GameId { get; set; }
 		public Guid TeamId { get; set; }
 		public int MinuteOfGame { get; set; }
-		public ICollection<GameEvents> Assists { get; set; }
+		//public ICollection<GameEvents> Assists { get; set; }
 	}
 }

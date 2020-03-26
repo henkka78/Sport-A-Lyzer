@@ -40,6 +40,8 @@ namespace Sport_A_Lyzer.GameOperations
 				Id = gameId
 			};
 
+			_context.Games.Add(game);
+
 			return game;
 		}
 	}

@@ -21,23 +21,24 @@ namespace Sport_A_Lyzer.GoalOperations
 		public async Task HandleAsync( UpsertGoalCommand command )
 		{
 			var goal =await GetOrCreateGoal( command.GoalId );
-			var assists = await GetOrCreateAssists(command.GoalId, command.UpsertGoalRequest.Assists);
+			//var assists = await GetOrCreateAssists(command.GoalId, command.UpsertGoalRequest.Assists);
 
 			goal.GoalTypeId = command.UpsertGoalRequest.GoalTypeId;
 			goal.PlayerId = command.UpsertGoalRequest.PlayerId;
 			goal.GameId = command.UpsertGoalRequest.GameId;
 			goal.TeamId = command.UpsertGoalRequest.TeamId;
 			goal.MinuteOfGame = command.UpsertGoalRequest.MinuteOfGame;
+			goal.TimeStamp = DateTime.Now;
 
-			foreach (var assist in assists)
-			{
-				var currentAssist = command.UpsertGoalRequest.Assists.Single(a => a.Id == assist.Id);
-				assist.EventTypeId = currentAssist.EventTypeId;
-				assist.GameId = currentAssist.GameId;
-				assist.PlayerId = currentAssist.PlayerId;
-				assist.Description = currentAssist.Description;
-				assist.TeamId = currentAssist.TeamId;
-			}
+			//foreach (var assist in assists)
+			//{
+			//	var currentAssist = command.UpsertGoalRequest.Assists.Single(a => a.Id == assist.Id);
+			//	assist.EventTypeId = currentAssist.EventTypeId;
+			//	assist.GameId = currentAssist.GameId;
+			//	assist.PlayerId = currentAssist.PlayerId;
+			//	assist.Description = currentAssist.Description;
+			//	assist.TeamId = currentAssist.TeamId;
+			//}
 
 			await _context.SaveChangesAsync();
 		}
