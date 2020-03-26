@@ -15,9 +15,10 @@ namespace Sport_A_Lyzer.Models
         public Guid HomeTeamId { get; set; }
         public Guid AwayTeamId { get; set; }
         public Guid? TournamentId { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
         public int? MinutesPlayed { get; set; }
+        public bool? IsClockTicking { get; set; }
+        public bool? GameEnded { get; set; }
+        public DateTime? StartTime { get; set; }
 
         public virtual Teams AwayTeam { get; set; }
         public virtual Teams HomeTeam { get; set; }

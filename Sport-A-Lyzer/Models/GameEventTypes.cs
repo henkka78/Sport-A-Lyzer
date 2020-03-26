@@ -10,11 +10,13 @@ namespace Sport_A_Lyzer.Models
             GameEvents = new HashSet<GameEvents>();
         }
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Uikey { get; set; }
+        public int SportId { get; set; }
 
+        public virtual Sports Sport { get; set; }
         public virtual ICollection<GameEvents> GameEvents { get; set; }
     }
 }

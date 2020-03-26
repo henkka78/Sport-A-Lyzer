@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Sport_A_Lyzer.CQRS;
 using Sport_A_Lyzer.GameEventOperations;
 using Sport_A_Lyzer.Models;
+using Sport_A_Lyzer.Services;
 
 namespace Sport_A_Lyzer.GoalOperations
 {
@@ -21,24 +22,22 @@ namespace Sport_A_Lyzer.GoalOperations
 		public async Task HandleAsync( UpsertGoalCommand command )
 		{
 			var goal =await GetOrCreateGoal( command.GoalId );
-			//var assists = await GetOrCreateAssists(command.GoalId, command.UpsertGoalRequest.Assists);
+			var assists = await GetOrCreateAssists(command.GoalId, command.UpsertGoalRequest.Assists);
 
 			goal.GoalTypeId = command.UpsertGoalRequest.GoalTypeId;
 			goal.PlayerId = command.UpsertGoalRequest.PlayerId;
 			goal.GameId = command.UpsertGoalRequest.GameId;
 			goal.TeamId = command.UpsertGoalRequest.TeamId;
 			goal.MinuteOfGame = command.UpsertGoalRequest.MinuteOfGame;
-			goal.TimeStamp = DateTime.Now;
 
-			//foreach (var assist in assists)
-			//{
-			//	var currentAssist = command.UpsertGoalRequest.Assists.Single(a => a.Id == assist.Id);
-			//	assist.EventTypeId = currentAssist.EventTypeId;
-			//	assist.GameId = currentAssist.GameId;
-			//	assist.PlayerId = currentAssist.PlayerId;
-			//	assist.Description = currentAssist.Description;
-			//	assist.TeamId = currentAssist.TeamId;
-			//}
+			foreach ( var assist in assists )
+			{
+				var currentAssist = command.UpsertGoalRequest.Assists.Single( a => a.AssistId == assist.Id );
+				assist.EventTypeId = new Guid( DatabaseConstants.GameEventTypeId.Assist.Name );
+				assist.GameId = command.UpsertGoalRequest.GameId;
+				assist.PlayerId = currentAssist.PlayerId;
+				assist.TeamId = command.UpsertGoalRequest.TeamId;
+			}
 
 			await _context.SaveChangesAsync();
 		}
@@ -63,9 +62,9 @@ namespace Sport_A_Lyzer.GoalOperations
 			return goal;
 		}
 
-		private async Task<ICollection<GameEvents>> GetOrCreateAssists( Guid goalId, ICollection<GameEvents> assists )
+		private async Task<ICollection<GameEvents>> GetOrCreateAssists( Guid goalId, ICollection<AssistRequest> assists )
 		{
-			var assistIds = assists.Select( a => a.Id ).ToList();
+			var assistIds = assists.Select( a => a.AssistId ).ToList();
 
 			var dbAssists = await _context.GameEvents
 				.Where( ge => assistIds.Contains( ge.Id ) )
@@ -89,11 +88,6 @@ namespace Sport_A_Lyzer.GoalOperations
 					assistResults.Add(assist);
 					_context.GameEvents.Add(assist);
 
-					_context.GoalsEvents.Add(new GoalsEvents()
-					{
-						GoalId = goalId,
-						GameEventId = assistId
-					});
 				}
 			}
 

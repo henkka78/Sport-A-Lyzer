@@ -73,7 +73,6 @@
     <Build Include="Tables\FoulTypes.sql" />
     <Build Include="Tables\GameEventTypes.sql" />
     <Build Include="Tables\GameEvents.sql" />
-    <Build Include="Tables\GoalsEvents.sql" />
     <Build Include="Tables\Translations.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +82,7 @@
     <None Include="PublishProfiles\LocalDb_AppDataBase.publish.xml" />
     <None Include="Scripts\StaticData\Sports.sql" />
     <None Include="Scripts\StaticData\GoalTypes.sql" />
+    <None Include="Scripts\StaticData\GameEventTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

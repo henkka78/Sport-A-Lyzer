@@ -126,4 +126,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c3d2b965-78fc-4184-b46a-50bb0a94abe5" ChangeDateTime="03/26/2020 21:32:52">
+    <Property Name="ElementName" Value="[dbo].[FK_GameEventTypes_Spors]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[GameEventTypes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_GameEventTypes_Sports]" />
+  </Operation>
 </Operations>
