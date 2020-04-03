@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sport_A_Lyzer.CQRS;
-using Sport_A_Lyzer.PlayerOperations;
+using Sport_A_Lyzer.CQRS.PlayerOperations;
 
 namespace Sport_A_Lyzer.Controllers
 {
-    [ApiController]
+	[Authorize]
+	[ApiController]
     public class PlayersController : ControllerBase
     {
 	    private readonly ICommandHandler<UpsertPlayerCommand> _upsertPlayerCommandHandler;
@@ -21,7 +23,7 @@ namespace Sport_A_Lyzer.Controllers
 		    _upsertPlayerCommandHandler = upsertPlayerCommandHandler;
 	    }
 
-		[Route("players/{playerId}")]
+		[Route( "api/players/{playerId}" )]
 		[HttpPost]
 		public async Task<ActionResult> PostUpsertPlayerAsync( Guid playerId, [FromBody]UpsertPlayerRequest request )
 		{

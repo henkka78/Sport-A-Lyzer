@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Team]
+(
+	[ID] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [Name] NVARCHAR(255) NOT NULL, 
+    [HomeTownId] NVARCHAR(10) NULL, 
+    CONSTRAINT [FK_Team_Town] FOREIGN KEY ([HomeTownID]) REFERENCES [Town]([ID])
+)

@@ -56,24 +56,29 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="Tables" />
     <Folder Include="PublishProfiles" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\StaticData" />
+    <Folder Include="dbo" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\Sports.sql" />
-    <Build Include="Tables\GoalTypes.sql" />
-    <Build Include="Tables\Tournaments.sql" />
-    <Build Include="Tables\Games.sql" />
-    <Build Include="Tables\Goals.sql" />
-    <Build Include="Tables\Teams.sql" />
-    <Build Include="Tables\Players.sql" />
-    <Build Include="Tables\Fouls.sql" />
-    <Build Include="Tables\FoulTypes.sql" />
-    <Build Include="Tables\GameEventTypes.sql" />
-    <Build Include="Tables\GameEvents.sql" />
-    <Build Include="Tables\Translations.sql" />
+    <Build Include="dbo\Foul.sql" />
+    <Build Include="dbo\FoulType.sql" />
+    <Build Include="dbo\GameClockEvent.sql" />
+    <Build Include="dbo\GameEvent.sql" />
+    <Build Include="dbo\GameEventType.sql" />
+    <Build Include="dbo\Game.sql" />
+    <Build Include="dbo\Goal.sql" />
+    <Build Include="dbo\GoalType.sql" />
+    <Build Include="dbo\Player.sql" />
+    <Build Include="dbo\Sport.sql" />
+    <Build Include="dbo\Team.sql" />
+    <Build Include="dbo\Tournament.sql" />
+    <Build Include="dbo\Translation.sql" />
+    <Build Include="dbo\Town.sql" />
+    <Build Include="dbo\Role.sql" />
+    <Build Include="dbo\User.sql" />
+    <Build Include="dbo\Organization.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="AppDataBase.refactorlog" />
@@ -82,7 +87,10 @@
     <None Include="PublishProfiles\LocalDb_AppDataBase.publish.xml" />
     <None Include="Scripts\StaticData\Sports.sql" />
     <None Include="Scripts\StaticData\GoalTypes.sql" />
-    <None Include="Scripts\StaticData\GameEventTypes.sql" />
+    <None Include="Scripts\StaticData\GameEventType.sql" />
+    <None Include="Scripts\StaticData\Town.sql" />
+    <None Include="Scripts\StaticData\Role.sql" />
+    <None Include="Scripts\StaticData\User.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

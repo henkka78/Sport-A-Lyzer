@@ -1,0 +1,45 @@
+<mdb-card>
+  <mdb-card-header class="info-color white-text text-center py-4">
+    <h5>
+      <strong>Pelin tiedot</strong>
+    </h5>
+  </mdb-card-header>
+
+  <mdb-card-body class="px-lg-3 pt-0">
+
+    <form class="text-center"
+          style="color: #757575;"
+          [formGroup]="gameForm"
+          (ngSubmit)="onSubmit()">
+      <!--<div class="md-form mt-3">
+        <input type="text"
+               formControlName="gameFormName"
+               id="materialGameFormName"
+               class="form-control"
+               mdbInput />
+        <label for="materialGameFormName">Joukkueen nimi</label>
+        <mdb-error *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">Input invalid</mdb-error>
+    <mdb-success *ngIf="firstName.valid && (firstName.dirty || firstName.touched)">Input valid</mdb-success>
+      </div>-->
+      <div class="md-form mt-3">
+        <mdb-select [options]="teams" placeholder="Kotijoukkue"></mdb-select>
+      </div>
+      <div class="md-form mt-3">
+        <mdb-select [options]="teams" placeholder="Vierasjoukkue"></mdb-select>
+      </div>
+      <button mdbBtn
+              color="info"
+              outline="true"
+              rounded="true"
+              block="true"
+              class="z-depth-0 my-4 waves-effect"
+              mdbWavesEffect
+              type="submit">
+        Tallenna peli
+        <mdb-spinner *ngIf="saving" spinnerColor="blue"></mdb-spinner>
+      </button>
+    </form>
+
+  </mdb-card-body>
+
+</mdb-card>

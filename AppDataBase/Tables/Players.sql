@@ -1,9 +1,0 @@
-﻿CREATE TABLE [dbo].[Players]
-(
-	[ID] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
-    [LastName] NVARCHAR(100) NOT NULL, 
-    [FirstName] NVARCHAR(100) NULL DEFAULT '', 
-    [Number] INT NOT NULL, 
-    [TeamID] UNIQUEIDENTIFIER NOT NULL, 
-    CONSTRAINT [FK_Players_Teams] FOREIGN KEY ([TeamID]) REFERENCES [Teams]([ID])
-)

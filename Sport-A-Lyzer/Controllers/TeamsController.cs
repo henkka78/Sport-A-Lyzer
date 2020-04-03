@@ -1,29 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sport_A_Lyzer.CQRS;
-using Sport_A_Lyzer.TeamOperations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sport_A_Lyzer.PlayerOperations;
+using Microsoft.AspNetCore.Authorization;
+using Sport_A_Lyzer.CQRS.PlayerOperations;
+using Sport_A_Lyzer.CQRS.TeamOperations;
 
 namespace Sport_A_Lyzer.Controllers
 {
+	[Authorize]
 	[ApiController]
     public class TeamsController : ControllerBase
     {
 	    private readonly ICommandHandler<UpsertTeamCommand> _upsertTeamCommandHandler;
 	    private readonly IQueryHandler<GetTeamsPlayersQuery, ICollection<PlayerResponse>> _getTeamsPlayersQueryHandler;
+	    private readonly IQueryHandler<GetTeamsQuery, ICollection<TeamResponse>> _getTeamsQueryHandler;
 
 	    public TeamsController(
 		    ICommandHandler<UpsertTeamCommand> upsertTeamCommandHandler,
-			IQueryHandler<GetTeamsPlayersQuery, ICollection<PlayerResponse>> getTeamsPlayersQueryHandler
+			IQueryHandler<GetTeamsPlayersQuery, ICollection<PlayerResponse>> getTeamsPlayersQueryHandler,
+			IQueryHandler<GetTeamsQuery, ICollection<TeamResponse>> getTeamsQueryHandler
 		    )
 	    {
 		    _upsertTeamCommandHandler = upsertTeamCommandHandler;
 		    _getTeamsPlayersQueryHandler = getTeamsPlayersQueryHandler;
+		    _getTeamsQueryHandler = getTeamsQueryHandler;
 	    }
 
-		[Route("teams/{teamId}")]
+	    [Route( "api/teams" )]
+	    [HttpGet]
+	    public async Task<ActionResult<ICollection<TeamResponse>>> GetTeamsAsync()
+	    {
+		    var query = new GetTeamsQuery();
+		    var teams = await _getTeamsQueryHandler.HandleAsync( query );
+		    return Ok( teams );
+	    }
+
+		[Route( "api/teams/{teamId}" )]
 		[HttpPost]
 		public async Task<ActionResult> PostUpsertTeamAsync( Guid teamId, [FromBody]UpsertTeamRequest request )
 		{
@@ -32,7 +46,7 @@ namespace Sport_A_Lyzer.Controllers
 			return Ok();
 		}
 
-		[Route( "teams/{teamId}/players" )]
+		[Route( "api/teams/{teamId}/players" )]
 		[HttpGet]
 		public async Task<ActionResult<ICollection<PlayerResponse>>> GetTeamsPlayersAsync( Guid teamId)
 		{

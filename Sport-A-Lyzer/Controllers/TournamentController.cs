@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sport_A_Lyzer.CQRS;
-using Sport_A_Lyzer.GameOperations;
-using Sport_A_Lyzer.TournamentOperations;
+using Sport_A_Lyzer.CQRS.GameOperations;
+using Sport_A_Lyzer.CQRS.TournamentOperations;
 
 namespace Sport_A_Lyzer.Controllers
 {
 	[ApiController]
+	[Authorize]
 	public class TournamentController : ControllerBase
 	{
 		private readonly IQueryHandler<GetGamesByTournamentIdQuery, ICollection<GameResponse>> _getGamesByTournamentIdQueryHandler;
@@ -25,7 +25,7 @@ namespace Sport_A_Lyzer.Controllers
 			_getTournamentsByYearQueryHandler = getTournamentsByYearQueryHandler;
 		}
 
-		[Route( "tournaments/{tournamentId}/games" )]
+		[Route( "api/tournaments/{tournamentId}/games" )]
 		[HttpGet]
 		public async Task<ActionResult<ICollection<GameResponse>>> GetTournamentGamesAsync( Guid tournamentId )
 		{
@@ -34,7 +34,7 @@ namespace Sport_A_Lyzer.Controllers
 			return Ok( games );
 		}
 
-		[Route( "years/{year}/tournaments" )]
+		[Route( "api/years/{year}/tournaments" )]
 		[HttpGet]
 		public async Task<ActionResult<ICollection<TournamentResponse>>> GetTournamentsByYearAsync( int year )
 		{

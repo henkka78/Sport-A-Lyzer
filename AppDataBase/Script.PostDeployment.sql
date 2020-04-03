@@ -16,5 +16,9 @@ SET NOCOUNT ON
 
 :r .\Scripts\StaticData\Sports.sql
 :r .\Scripts\StaticData\GoalTypes.sql
+:r .\Scripts\StaticData\GameEventType.sql
+:r .\Scripts\StaticData\Town.sql
+:r .\Scripts\StaticData\Role.sql
+:r .\Scripts\StaticData\User.sql
 
 GO

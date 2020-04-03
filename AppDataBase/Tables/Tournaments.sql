@@ -1,7 +1,0 @@
-﻿CREATE TABLE [dbo].[Tournaments]
-(
-	[ID] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
-    [Name] NCHAR(255) NOT NULL, 
-    [StartTime] DATETIME NOT NULL, 
-    [EndTime] DATETIME NOT NULL
-)
