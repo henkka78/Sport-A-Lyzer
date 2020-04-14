@@ -24,8 +24,8 @@ namespace Sport_A_Lyzer.Controllers
 	    }
 
 		[Route( "api/players/{playerId}" )]
-		[HttpPost]
-		public async Task<ActionResult> PostUpsertPlayerAsync( Guid playerId, [FromBody]UpsertPlayerRequest request )
+		[HttpPut]
+		public async Task<ActionResult> PutUpsertPlayerAsync( Guid playerId, [FromBody]UpsertPlayerRequest request )
 		{
 			var command = new UpsertPlayerCommand( playerId , request);
 			await _upsertPlayerCommandHandler.HandleAsync(command);

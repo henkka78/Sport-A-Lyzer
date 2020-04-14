@@ -38,8 +38,8 @@ namespace Sport_A_Lyzer.Controllers
 	    }
 
 		[Route( "api/teams/{teamId}" )]
-		[HttpPost]
-		public async Task<ActionResult> PostUpsertTeamAsync( Guid teamId, [FromBody]UpsertTeamRequest request )
+		[HttpPut]
+		public async Task<ActionResult> PutUpsertTeamAsync( Guid teamId, [FromBody]UpsertTeamRequest request )
 		{
 			var command=new UpsertTeamCommand(teamId, request.Name);
 			await _upsertTeamCommandHandler.HandleAsync(command);

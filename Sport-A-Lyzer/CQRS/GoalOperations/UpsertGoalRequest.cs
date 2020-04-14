@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Sport_A_Lyzer.CQRS.GoalOperations
 {
@@ -10,7 +11,8 @@ namespace Sport_A_Lyzer.CQRS.GoalOperations
 		public Guid GameId { get; set; }
 		public Guid TeamId { get; set; }
 		public int MinuteOfGame { get; set; }
-		public ICollection<AssistRequest> Assists { get; set; }
+		//[JsonProperty( PropertyName = "assists" )]
+		//public ICollection<AssistRequest> Assists { get; set; }
 	}
 
 	public class AssistRequest

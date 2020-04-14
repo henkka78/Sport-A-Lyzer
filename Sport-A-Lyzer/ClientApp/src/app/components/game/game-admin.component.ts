@@ -7,11 +7,11 @@ import { forkJoin } from 'rxjs';
 import { ModalDirective } from 'ng-uikit-pro-standard';
 
 @Component({
-  selector: 'app-game',
-  templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
+  selector: 'app-game-admin',
+  templateUrl: './game-admin.component.html',
+  styleUrls: ['./game-admin.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameAdminComponent implements OnInit {
   @ViewChild('gameModal', { static: false }) gameEditorModal: ModalDirective;
 
   public games: Game[];
@@ -26,7 +26,7 @@ export class GameComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const gamesQuery = this.gameService.getGamesByTournamentId("72b72923-0929-48bb-82bd-0c2df6c5690e");
+    const gamesQuery = this.gameService.getGamesByTournamentId();
     const teamsQuery = this.teamService.getTeams();
     forkJoin(gamesQuery, teamsQuery).subscribe(results => {
       this.games = results[0];

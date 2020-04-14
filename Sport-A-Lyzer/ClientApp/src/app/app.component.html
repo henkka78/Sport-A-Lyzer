@@ -42,7 +42,7 @@
 
             <!-- Simple link -->
             <mdb-accordion-item class="no-collase">
-              <mdb-accordion-item-head mdbWavesEffect>
+              <mdb-accordion-item-head routerLink="/game-follow" routerLinkActive="active" mdbWavesEffect>
                 <mdb-icon far icon="futbol"></mdb-icon> PELI
               </mdb-accordion-item-head>
               <mdb-accordion-item-body></mdb-accordion-item-body>
@@ -55,8 +55,8 @@
               </mdb-accordion-item-head>
               <mdb-accordion-item-body>
                 <ul>
-                  <li><a routerLink="/team-view" routerLinkActive="active" [ngClass]="getActiveRoute('/team-view')" mdbWavesEffect>Joukkueet</a></li>
-                  <li><a routerLink="/game-view" routerLinkActive="active" [ngClass]="getActiveRoute('/game-view')" mdbWavesEffect>Pelit</a></li>
+                  <li><a routerLink="/team-admin" routerLinkActive="active" [ngClass]="getActiveRoute('/team-view')" mdbWavesEffect>Joukkueet</a></li>
+                  <li><a routerLink="/game-admin" routerLinkActive="active" [ngClass]="getActiveRoute('/game-view')" mdbWavesEffect>Pelit</a></li>
                   <!--<li><a routerLink="/user-control" routerLinkActive="active" [ngClass]="getActiveRoute('/user-control')" mdbWavesEffect>Käyttäjähallinta</a></li>-->
                 </ul>
               </mdb-accordion-item-body>

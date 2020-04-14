@@ -19,7 +19,7 @@ namespace Sport_A_Lyzer.DependencyInjection
 					GetGamesByTournamentIdQueryHandler>()
 				.AddScoped<IQueryHandler<GetTournamentsByYearQuery, ICollection<TournamentResponse>>,
 					GetTournamentsByYearQueryHandler>()
-				.AddScoped<IQueryHandler<GetGameQuery, GameResponse>, GetGameQueryHandler>()
+				.AddScoped<IQueryHandler<GetGameQuery, GameFollowResponse>, GetGameQueryHandler>()
 				.AddScoped<ICommandHandler<UpsertGameCommand>, UpsertGameCommandHandler>()
 				.AddScoped<ICommandHandler<DeleteGameCommand>, DeleteGameCommandHandler>()
 				.AddScoped<ICommandHandler<UpsertTeamCommand>, UpsertTeamCommandHandler>()
@@ -31,8 +31,9 @@ namespace Sport_A_Lyzer.DependencyInjection
 				>()
 				.AddScoped<ICommandHandler<UpsertGoalCommand>, UpsertGoalCommandHandler>()
 				.AddScoped<IQueryHandler<GetTeamsQuery, ICollection<TeamResponse>>, GetTeamsQueryHandler>()
-				.AddScoped<ICommandHandler<PauseGameCommand>, PauseGameCommandHandler>()
-				.AddScoped<ICommandHandler<UnPauseGameCommand>, UnPauseGameCommandHandler>();
+				.AddScoped<ICommandHandler<SetGamePauseStatusCommand>, SetGamePauseStatusCommandHandler>()
+				.AddScoped<ICommandHandler<StartGameCommand>, StartGameCommandHandler>()
+				.AddScoped<ICommandHandler<EndGameCommand>, EndGameCommandHandler>();
 		}
 	}
 }

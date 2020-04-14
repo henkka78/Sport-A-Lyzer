@@ -11,18 +11,20 @@ import { PlayerFormComponent } from './components/player-form/player-form.compon
 import { TeamFormComponent } from './components/team-form/team-form.component';
 import { GameFormComponent } from './components/game-form/game-form.component';
 import { TeamComponent } from './components/team/team.component';
-import { GameComponent } from './components/game/game.component';
+import { GameAdminComponent } from './components/game/game-admin.component';
 import { LoginComponent } from './components/login/login.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor'
 import { ErrorInterceptor } from './helpers/error.interceptor'
 import { AuthGuard } from './helpers/auth.guard';
 import { HomeComponent } from './components/home/home.component';
-import { UserControlComponent } from './components/user-control/user-control.component'
+import { UserControlComponent } from './components/user-control/user-control.component';
+import { GameFollowComponent } from './components/game-follow/game-follow.component'
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'team-view', component: TeamComponent, canActivate: [AuthGuard] },
-  { path: 'game-view', component: GameComponent, canActivate: [AuthGuard] },
+  { path: 'team-admin', component: TeamComponent, canActivate: [AuthGuard] },
+  { path: 'game-admin', component: GameAdminComponent, canActivate: [AuthGuard] },
+  { path: 'game-follow', component: GameFollowComponent, canActivate: [AuthGuard] },
   { path: 'user-control', component: UserControlComponent, canActivate: [AuthGuard] },
   { path: 'register', component: UserControlComponent },
   { path: 'login', component: LoginComponent }
@@ -35,10 +37,11 @@ const appRoutes: Routes = [
     TeamFormComponent,
     GameFormComponent,
     TeamComponent,
-    GameComponent,
+    GameAdminComponent,
     LoginComponent,
     HomeComponent,
-    UserControlComponent
+    UserControlComponent,
+    GameFollowComponent
   ],
   imports: [
     BrowserModule,

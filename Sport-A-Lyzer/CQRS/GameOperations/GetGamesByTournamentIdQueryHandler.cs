@@ -27,7 +27,12 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 					AwayTeamName = g.AwayTeam.Name,
 					AwayTeamId = g.AwayTeamId,
 					HomeTeamName = g.HomeTeam.Name,
-					HomeTeamId = g.HomeTeamId
+					HomeTeamId = g.HomeTeamId,
+					GameDay = g.GameDay,
+					StartTime = g.StartTime,
+					PitchName = g.PitchName,
+					Description = g.Description,
+					PlannedLength = g.PlannedLength
 				} ).ToListAsync();
 		}
 	}

@@ -175,4 +175,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="7a29ee9e-c7af-47c2-83af-48e5420418a2" ChangeDateTime="04/06/2020 09:26:28">
+    <Property Name="ElementName" Value="[dbo].[GamePause].[TimeStamp]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GamePause]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StartTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e3686d3f-80f3-4d8f-ad90-c92d17031096" ChangeDateTime="04/06/2020 09:26:43">
+    <Property Name="ElementName" Value="[dbo].[GamePause].[IsClockRunning]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GamePause]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EndTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="796c36a9-8132-4949-8af1-6c1017f83b1b" ChangeDateTime="04/06/2020 14:47:17">
+    <Property Name="ElementName" Value="[dbo].[Game].[LengthMinutes]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Game]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PlannedLength" />
+  </Operation>
 </Operations>

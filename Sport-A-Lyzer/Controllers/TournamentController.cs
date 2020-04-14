@@ -27,7 +27,7 @@ namespace Sport_A_Lyzer.Controllers
 
 		[Route( "api/tournaments/{tournamentId}/games" )]
 		[HttpGet]
-		public async Task<ActionResult<ICollection<GameResponse>>> GetTournamentGamesAsync( Guid tournamentId )
+		public async Task<ActionResult<ICollection<GameFollowResponse>>> GetTournamentGamesAsync( Guid? tournamentId )
 		{
 			var query = new GetGamesByTournamentIdQuery( tournamentId );
 			var games = await _getGamesByTournamentIdQueryHandler.HandleAsync( query );

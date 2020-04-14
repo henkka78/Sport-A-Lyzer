@@ -20,7 +20,7 @@ namespace Sport_A_Lyzer.CQRS.GoalOperations
 		public async Task HandleAsync( UpsertGoalCommand command )
 		{
 			var goal =await GetOrCreateGoal( command.GoalId );
-			var assists = await GetOrCreateAssists(command.GoalId, command.UpsertGoalRequest.Assists);
+			//var assists = await GetOrCreateAssists(command.GoalId, command.UpsertGoalRequest.Assists);
 
 			goal.GoalTypeId = command.UpsertGoalRequest.GoalTypeId;
 			goal.PlayerId = command.UpsertGoalRequest.PlayerId;
@@ -28,14 +28,14 @@ namespace Sport_A_Lyzer.CQRS.GoalOperations
 			goal.TeamId = command.UpsertGoalRequest.TeamId;
 			goal.MinuteOfGame = command.UpsertGoalRequest.MinuteOfGame;
 
-			foreach ( var assist in assists )
-			{
-				var currentAssist = command.UpsertGoalRequest.Assists.Single( a => a.AssistId == assist.Id );
-				assist.EventTypeId = new Guid( DatabaseConstants.GameEventTypeId.Assist.Name );
-				assist.GameId = command.UpsertGoalRequest.GameId;
-				assist.PlayerId = currentAssist.PlayerId;
-				assist.TeamId = command.UpsertGoalRequest.TeamId;
-			}
+			//foreach ( var assist in assists )
+			//{
+			//	var currentAssist = command.UpsertGoalRequest.Assists.Single( a => a.AssistId == assist.Id );
+			//	assist.EventTypeId = new Guid( DatabaseConstants.GameEventTypeId.Assist.Name );
+			//	assist.GameId = command.UpsertGoalRequest.GameId;
+			//	assist.PlayerId = currentAssist.PlayerId;
+			//	assist.TeamId = command.UpsertGoalRequest.TeamId;
+			//}
 
 			await _context.SaveChangesAsync();
 		}
@@ -59,37 +59,37 @@ namespace Sport_A_Lyzer.CQRS.GoalOperations
 			return goal;
 		}
 
-		private async Task<ICollection<GameEvent>> GetOrCreateAssists( Guid goalId, ICollection<AssistRequest> assists )
-		{
-			var assistIds = assists.Select( a => a.AssistId ).ToList();
+		//private async Task<ICollection<GameEvent>> GetOrCreateAssists( Guid goalId, ICollection<AssistRequest> assists )
+		//{
+		//	var assistIds = assists.Select( a => a.AssistId ).ToList();
 
-			var dbAssists = await _context.GameEvent
-				.Where( ge => assistIds.Contains( ge.Id ) )
-				.ToListAsync();
+		//	var dbAssists = await _context.GameEvent
+		//		.Where( ge => assistIds.Contains( ge.Id ) )
+		//		.ToListAsync();
 
-			var assistResults = new List<GameEvent>();
+		//	var assistResults = new List<GameEvent>();
 
-			foreach (var assistId in assistIds)
-			{
-				if (dbAssists.Any(a => a.Id == assistId))
-				{
-					assistResults.Add(dbAssists.Single(a=>a.Id==assistId));
-				}
-				else
-				{
-					var assist=new GameEvent()
-					{
-						Id=assistId
-					};
+		//	foreach (var assistId in assistIds)
+		//	{
+		//		if (dbAssists.Any(a => a.Id == assistId))
+		//		{
+		//			assistResults.Add(dbAssists.Single(a=>a.Id==assistId));
+		//		}
+		//		else
+		//		{
+		//			var assist=new GameEvent()
+		//			{
+		//				Id=assistId
+		//			};
 
-					assistResults.Add(assist);
-					_context.GameEvent.Add(assist);
+		//			assistResults.Add(assist);
+		//			_context.GameEvent.Add(assist);
 
-				}
-			}
+		//		}
+		//	}
 
-			return assistResults;
+		//	return assistResults;
 
-		}
+		//}
 	}
 }

@@ -21,11 +21,11 @@ export class TeamService {
     return this.http.get<PlayerModel[]>(`/api/teams/${teamId}/players`);
   }
 
-  postPlayer(playerId, data) {
-    return this.http.post(`/api/players/${playerId}`, data);
+  putPlayer(playerId, data) {
+    return this.http.put(`/api/players/${playerId}`, data);
   }
 
-  postTeam(teamId, data) {
-    return this.http.post(`/api/teams/${teamId}`, data);
+  putTeam(teamId, data) {
+    return this.http.put(`/api/teams/${teamId}`, data);
   }
 }

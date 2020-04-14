@@ -64,7 +64,7 @@
   <ItemGroup>
     <Build Include="dbo\Foul.sql" />
     <Build Include="dbo\FoulType.sql" />
-    <Build Include="dbo\GameClockEvent.sql" />
+    <Build Include="dbo\GamePause.sql" />
     <Build Include="dbo\GameEvent.sql" />
     <Build Include="dbo\GameEventType.sql" />
     <Build Include="dbo\Game.sql" />

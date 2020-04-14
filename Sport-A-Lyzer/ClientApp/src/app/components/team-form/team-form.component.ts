@@ -41,7 +41,7 @@ export class TeamFormComponent implements OnInit {
     let team = {
       Name: this.teamForm.value.teamFormName
     }
-    this.teamService.postTeam(teamId, team).subscribe(() => {
+    this.teamService.putTeam(teamId, team).subscribe(() => {
       this.teamForm.reset();
       this.saving = false;
       this.closeEvent.emit();

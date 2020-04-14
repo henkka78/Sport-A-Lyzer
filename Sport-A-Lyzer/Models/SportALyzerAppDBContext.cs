@@ -18,9 +18,9 @@ namespace Sport_A_Lyzer.Models
         public virtual DbSet<Foul> Foul { get; set; }
         public virtual DbSet<FoulType> FoulType { get; set; }
         public virtual DbSet<Game> Game { get; set; }
-        public virtual DbSet<GameClockEvent> GameClockEvent { get; set; }
         public virtual DbSet<GameEvent> GameEvent { get; set; }
         public virtual DbSet<GameEventType> GameEventType { get; set; }
+        public virtual DbSet<GamePause> GamePause { get; set; }
         public virtual DbSet<Goal> Goal { get; set; }
         public virtual DbSet<GoalType> GoalType { get; set; }
         public virtual DbSet<Organization> Organization { get; set; }
@@ -99,9 +99,19 @@ namespace Sport_A_Lyzer.Models
                     .HasColumnName("ID")
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.ActualEndTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ActualStartTime).HasColumnType("datetime");
+
                 entity.Property(e => e.AwayTeamId).HasColumnName("AwayTeamID");
 
+                entity.Property(e => e.Description).HasMaxLength(255);
+
+                entity.Property(e => e.GameDay).HasColumnType("date");
+
                 entity.Property(e => e.HomeTeamId).HasColumnName("HomeTeamID");
+
+                entity.Property(e => e.PitchName).HasMaxLength(50);
 
                 entity.Property(e => e.StartTime).HasColumnType("datetime");
 
@@ -123,21 +133,6 @@ namespace Sport_A_Lyzer.Models
                     .WithMany(p => p.Game)
                     .HasForeignKey(d => d.TournamentId)
                     .HasConstraintName("FK_Games_Tournament");
-            });
-
-            modelBuilder.Entity<GameClockEvent>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.GameId).HasColumnName("GameID");
-
-                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Game)
-                    .WithMany(p => p.GameClockEvent)
-                    .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GameClockEvents_Games");
             });
 
             modelBuilder.Entity<GameEvent>(entity =>
@@ -205,6 +200,23 @@ namespace Sport_A_Lyzer.Models
                     .HasForeignKey(d => d.SportId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GameEventTypes_Sports");
+            });
+
+            modelBuilder.Entity<GamePause>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.EndTime).HasColumnType("datetime");
+
+                entity.Property(e => e.GameId).HasColumnName("GameID");
+
+                entity.Property(e => e.StartTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.GamePause)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GameClockEvents_Games");
             });
 
             modelBuilder.Entity<Goal>(entity =>

@@ -70,7 +70,7 @@ export class PlayerFormComponent implements OnInit {
       Number: this.playerForm.value.playerFormNumber,
       TeamId: this.teamId
     }
-    this.teamService.postPlayer(playerId, player).subscribe(() => {
+    this.teamService.putPlayer(playerId, player).subscribe(() => {
       this.playerForm.reset();
       this.saving = false;
       this.closeEvent.emit();

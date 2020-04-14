@@ -34,7 +34,7 @@ export class UserControlComponent implements OnInit {
     this.user = {
       firstName: this.userForm.value.userFormFirstName,
       lastName: this.userForm.value.userFormLastName,
-      username: this.userForm.value.userFormUsername,
+      userName: this.userForm.value.userFormUsername,
       password: this.userForm.value.userFormPassword
     };
 

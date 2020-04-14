@@ -20,6 +20,9 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 			game.TournamentId = command.Request.TournamentId;
 			game.AwayTeamId = command.Request.AwayTeamId;
 			game.HomeTeamId = command.Request.HomeTeamId;
+			game.StartTime = command.Request.StartTime;
+			game.GameDay = command.Request.GameDay;
+			game.PlannedLength = command.Request.PlannedLength;
 
 			await _context.SaveChangesAsync();
 		}
