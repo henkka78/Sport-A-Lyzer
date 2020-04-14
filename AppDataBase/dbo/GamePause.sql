@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[GamePause]
+(
+	[ID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
+    [GameID] UNIQUEIDENTIFIER NOT NULL, 
+    [StartTime] DATETIME NULL, 
+    [EndTime] DATETIME NULL, 
+    CONSTRAINT [FK_GameClockEvents_Games] FOREIGN KEY ([GameID]) REFERENCES [Game]([ID])
+)
