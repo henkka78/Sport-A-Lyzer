@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sport_A_Lyzer.Helpers;
 using Sport_A_Lyzer.Models;
 
 namespace Sport_A_Lyzer.CQRS.GameOperations
@@ -17,28 +18,24 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 
 		public async Task HandleAsync( SetGamePauseStatusCommand command )
 		{
-			var game = await _context.Game.SingleOrDefaultAsync( g => g.Id == command.GameId && g.ActualEndTime==null );
+			var game = await _context.Game.SingleOrDefaultAsync( g => g.Id == command.GameId && g.ActualEndTime == null );
 
 			if ( game == null )
 			{
 				throw new InvalidOperationException( "Antamallasi ID:llä ei löydy aktiivista peliä. Et voi asettaa taukoja!" );
 			}
 
-			var pause = await GetOrCreatePause( command.GameId );
+			var pause = await GetOrCreatePause( command.GameId, command.TimeStamp );
 
-			if ( pause.IsActivePause )
+			if ( command.IsActivePause )
 			{
-				pause.EndPause( command.TimeStamp );
-			}
-			else
-			{
-				pause.StarPause( command.TimeStamp );
+				pause.EndTime = LocalTimeProvider.GetLocalTime( command.TimeStamp );
 			}
 
 			await _context.SaveChangesAsync();
 		}
 
-		private async Task<GamePause> GetOrCreatePause( Guid gameId )
+		private async Task<GamePause> GetOrCreatePause( Guid gameId, DateTime timeStamp )
 		{
 			var pause = await _context.GamePause
 				.SingleOrDefaultAsync( gp => gp.GameId == gameId && gp.EndTime == null );
@@ -50,7 +47,8 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 
 			pause = new GamePause()
 			{
-				GameId = gameId
+				GameId = gameId,
+				StartTime = LocalTimeProvider.GetLocalTime( timeStamp )
 			};
 
 			_context.GamePause.Add( pause );

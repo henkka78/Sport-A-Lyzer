@@ -8,4 +8,6 @@ export class Game {
   actualEndTime: string;
   players: any;
   goalStats: any;
+  result: string;
+  pausesHeld: number;
 }

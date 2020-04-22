@@ -24,24 +24,20 @@ namespace Sport_A_Lyzer.CQRS.GoalOperations
 				.ToListAsync();
 
 			var result = goals.GroupBy( g => new { g.TeamId, g.Team.Name } )
-				.Select( g => new GoalStatsResponse()
+				.Select( tgr => new GoalStatsResponse()
 				{
-					TeamId = g.Key.TeamId,
-					TeamName = g.Key.Name
+					TeamId = tgr.Key.TeamId,
+					TeamName = tgr.Key.Name,
+					Scorers = goals.Where( g => g.TeamId == tgr.Key.TeamId )
+						.GroupBy( prp => new { prp.Player } )
+						.Select( p => new Scorer()
+						{
+							Name = p.Key.Player.FirstName + " " + p.Key.Player.LastName,
+							Number = p.Key.Player.Number,
+							NumberOfGoals = p.Count(),
+							Minutes = goals.Where( gg => gg.PlayerId == p.Key.Player.Id ).Select( gg => gg.MinuteOfGame ).ToList()
+						} ).ToList()
 				} ).ToList();
-
-			foreach ( var team in result )
-			{
-				team.Scorers = goals.Where( g => g.TeamId == team.TeamId )
-					.GroupBy( g => new { g.Player } )
-					.Select( g => new Scorer()
-					{
-						Name = g.Key.Player.FirstName + " " + g.Key.Player.LastName,
-						Number = g.Key.Player.Number,
-						NumberOfGoals = g.Count(),
-						Minutes = goals.Where( gg => gg.PlayerId == g.Key.Player.Id ).Select( gg => gg.MinuteOfGame ).ToList()
-					} ).ToList();
-			}
 
 			return result;
 		}

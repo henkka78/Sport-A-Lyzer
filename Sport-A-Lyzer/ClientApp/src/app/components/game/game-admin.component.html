@@ -1,33 +1,34 @@
-<h4>Pelien lisäys ja muokkaus</h4>
-<table mdbTable class="col-lg-6 col-sm-12">
-  <thead>
-  <tr>
-    <th scope="col">Kotijoukkue</th>
-    <th scope="col">Vierasjoukkue</th>
-    <th scope="col">Aloitusaika</th>
-    <th scope="col">Lopputulos</th>
-    <th scope="col">
-      <a (click)="addGame()">
-        <mdb-icon fas icon="plus"></mdb-icon>
-      </a>
-    </th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr mdbTableCol *ngFor="let game of games">
-    <td>{{game.homeTeamName}}</td>
-    <td>{{game.awayTeamName}}</td>
-    <td>{{game.startTime}}</td>
-    <td></td>
-    <td>
-      <a (click)="editGame(game.id)">
-        <mdb-icon fas icon="pen"></mdb-icon>
-      </a>
-    </td>
-  </tr>
-  </tbody>
-</table>
-
+<div class="jumbotron col-lg-6">
+  <h4>Pelien lisäys ja muokkaus</h4>
+  <table mdbTable class="col-12">
+    <thead>
+      <tr>
+        <th scope="col">Kotijoukkue</th>
+        <th scope="col">Vierasjoukkue</th>
+        <th scope="col">Pelipäivä</th>
+        <th scope="col">Lopputulos</th>
+        <th scope="col">
+          <a (click)="addGame()">
+            <mdb-icon fas icon="plus"></mdb-icon>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr mdbTableCol *ngFor="let game of games">
+        <td>{{game.homeTeamName}}</td>
+        <td>{{game.awayTeamName}}</td>
+        <td>{{ game.gameDay | date:'dd.MM.yyyy' }}</td>
+        <td>{{game.result}}</td>
+        <td>
+          <a (click)="editGame(game.id)">
+            <mdb-icon fas icon="pen"></mdb-icon>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <div mdbModal #gameModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gameModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

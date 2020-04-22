@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IMyOptions } from 'ng-uikit-pro-standard';
 import { UUID } from 'angular2-uuid';
@@ -13,6 +13,7 @@ export class GameFormComponent implements OnInit {
   @Input() teams: any[];
   public gameForm: FormGroup;
   public saving: boolean;
+  @Output() closeEvent = new EventEmitter();
 
   public gameDatePickerOptions: IMyOptions = {
     dayLabels: { mo: 'Ma', tu: 'Ti', we: 'Ke', th: 'To', fr: 'Pe', sa: 'La', su: 'Su', },
@@ -59,7 +60,8 @@ export class GameFormComponent implements OnInit {
 
     this.gameService.upsertGame(UUID.UUID(), gameData).subscribe(() => {
       this.saving = false;
-    })
+      this.closeEvent.emit();
+    });
   }
 
   private parseFinnishDate(dateString) {

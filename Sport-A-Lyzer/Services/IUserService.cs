@@ -6,8 +6,8 @@ namespace Sport_A_Lyzer.Services
 {
 	public interface IUserService
 	{
-		User Authenticate( string username, string password );
+		Task<User> Authenticate( string username, string password );
 		IEnumerable<User> GetAll();
-		void AddUser( UserRequest userRequest );
+		Task AddUser( UserRequest userRequest );
 	}
 }

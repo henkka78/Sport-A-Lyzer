@@ -91,6 +91,7 @@
     <None Include="Scripts\StaticData\Town.sql" />
     <None Include="Scripts\StaticData\Role.sql" />
     <None Include="Scripts\StaticData\User.sql" />
+    <None Include="PublishProfiles\Winhost_AppDatabase.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

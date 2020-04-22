@@ -19,6 +19,7 @@ export class GameAdminComponent implements OnInit {
   public teamsSelect: any[];
   public teamsLoaded: boolean;
   public gameModalOpened: boolean;
+  public isNewGame = false;
 
   constructor(
     private gameService: GameService,
@@ -48,4 +49,11 @@ export class GameAdminComponent implements OnInit {
     this.gameEditorModal.show();
   }
 
+  public editorClose(): void {
+    this.gameEditorModal.hide();
+  }
+
+  public editGame(id): void {
+
+  }
 }

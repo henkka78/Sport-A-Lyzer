@@ -1,71 +1,64 @@
-<h3>Joukkueet</h3>
-<div class="row mt-3">
+<div class="col-lg-6 jumbotron">
+  <h3>Joukkueet</h3>
+  <div class="row mt-3 col-lg-8">
 
-  <div class="col-lg-3 col-sm-12">
-    <table mdbTable>
-      <thead>
-      <tr>
-        <th scope="col">Nimi</th>
-        <th scope="col">
-          <a (click)="addTeam()">
-            <mdb-icon fas icon="plus"></mdb-icon>
-          </a>
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr mdbTableCol *ngFor="let team of teams">
-        <td><a (click)="selectTeam(team.teamId)">{{team.name}}</a></td>
-        <td>
-          <a (click)="editTeam(team.teamId)">
-            <mdb-icon fas icon="pen"></mdb-icon>
-          </a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-<!--<div class="row">
-  <div class="col-lg-3 col-sm-12">
-    <mdb-select [options]="teams" placeholder="Valitse joukkue" (selected)="teamSelected($event)"></mdb-select>
-  </div>
-</div>-->
-<div class="ml-1 mt-3">
-  <div class="row mt-3" *ngIf="playersLoaded">
-    <h5>Joukkueen {{selectedTeam.name}} pelaajat</h5>
-  </div>
-  <div class="row mt-3" *ngIf="playersLoaded">
-
-    <div class="col-lg-3 col-sm-12">
       <table mdbTable>
         <thead>
           <tr>
-            <th scope="col">#</th>
             <th scope="col">Nimi</th>
             <th scope="col">
-              <a (click)="addPlayer()">
+              <a (click)="addTeam()">
                 <mdb-icon fas icon="plus"></mdb-icon>
               </a>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr mdbTableCol *ngFor="let player of players">
-            <th scope="row">{{player.playerNumber}}</th>
-            <td>{{player.firstName}} {{player.lastName}}</td>
+          <tr mdbTableCol *ngFor="let team of teams">
+            <td><a (click)="selectTeam(team.teamId)">{{team.name}}</a></td>
             <td>
-              <a (click)="editPlayer(player.playerId)">
+              <a (click)="editTeam(team.teamId)">
                 <mdb-icon fas icon="pen"></mdb-icon>
               </a>
             </td>
           </tr>
         </tbody>
       </table>
+  </div>
+
+  <div class="ml-1 mt-3 col-12" *ngIf="playersLoaded">
+    <div class="row mt-3" >
+      <h5>Joukkueen {{selectedTeam.name}} pelaajat</h5>
     </div>
+    <div class="row mt-3 col-lg-8">
+
+        <table mdbTable>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nimi</th>
+              <th scope="col">
+                <a (click)="addPlayer()">
+                  <mdb-icon fas icon="plus"></mdb-icon>
+                </a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCol *ngFor="let player of players">
+              <th scope="row">{{player.playerNumber}}</th>
+              <td>{{player.firstName}} {{player.lastName}}</td>
+              <td>
+                <a (click)="editPlayer(player.playerId)">
+                  <mdb-icon fas icon="pen"></mdb-icon>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
   </div>
 </div>
-
 <div mdbModal #playerModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myplayerModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sport_A_Lyzer.Models;
-using Sport_A_Lyzer.Services;
 
 namespace Sport_A_Lyzer.CQRS.GoalOperations
 {

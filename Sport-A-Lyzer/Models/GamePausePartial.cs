@@ -4,15 +4,15 @@ namespace Sport_A_Lyzer.Models
 {
 	public partial class GamePause
 	{
-		public bool IsActivePause => this.StartTime != null && this.EndTime == null;
-		public void StarPause(DateTime timeStamp)
+		public bool IsActivePause => this.EndTime == null;
+		public void StarPause( DateTime timeStamp )
 		{
-			this.StartTime = timeStamp;
+			this.StartTime = timeStamp.ToLocalTime();
 		}
 
-		public void EndPause(DateTime timeStamp)
+		public void EndPause( DateTime timeStamp )
 		{
-			this.EndTime = timeStamp;
+			this.EndTime = timeStamp.ToLocalTime();
 		}
 	}
 }

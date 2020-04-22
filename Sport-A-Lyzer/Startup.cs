@@ -18,6 +18,8 @@ namespace Sport_A_Lyzer
 {
 	public class Startup
 	{
+		private readonly string CorsPolicyName = "MyCorsPolicy";
+
 		public Startup( IConfiguration configuration )
 		{
 			Configuration = configuration;
@@ -28,8 +30,25 @@ namespace Sport_A_Lyzer
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices( IServiceCollection services )
 		{
+			services.AddCors( options =>
+			{
+				options.AddPolicy( name: CorsPolicyName,
+					builder =>
+					{
+						builder.WithOrigins("http://bloodyhanks.com", "http://www.bloodyhanks.com")
+							.AllowAnyMethod()
+							.AllowAnyHeader();
+					} );
+			} );
 			services.AddControllersWithViews();
+
+			// In production, the Angular files will be served from this directory
+			services.AddSpaStaticFiles( configuration =>
+			{
+				configuration.RootPath = "ClientApp/dist/ng-uikit-pro-standard";
+			} );
 			services.AddControllers();
+			
 
 			var appSettingsSection = Configuration.GetSection( "AppSettings" );
 			services.Configure<AppSettings>( appSettingsSection );
@@ -55,17 +74,13 @@ namespace Sport_A_Lyzer
 					};
 				} );
 
-			// In production, the React files will be served from this directory
-			services.AddSpaStaticFiles( configuration =>
-			 {
-				 configuration.RootPath = "ClientApp/dist";
-			 } );
+
 
 			services.AddDbContext<SportALyzerAppDbContext>( options =>
 				options.UseSqlServer( Configuration.GetConnectionString( "AppDatabase" ) ) );
 			services.AddScoped<IUserService, UserService>();
 
-			DependencyInjection.Bootstrap.RegisterInterfaceImplementations(services);
+			DependencyInjection.Bootstrap.RegisterInterfaceImplementations( services );
 			services.AddSwaggerGen( c =>
 			{
 				c.SwaggerDoc( "v1", new OpenApiInfo { Title = "SportALyzer_API", Version = "v1" } );
@@ -75,6 +90,7 @@ namespace Sport_A_Lyzer
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure( IApplicationBuilder app, IWebHostEnvironment env )
 		{
+			app.UseCors( CorsPolicyName );
 			if ( env.IsDevelopment() )
 			{
 				app.UseDeveloperExceptionPage();
@@ -94,9 +110,13 @@ namespace Sport_A_Lyzer
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-			app.UseSpaStaticFiles();
+			if ( !env.IsDevelopment() )
+			{
+				app.UseSpaStaticFiles();
+			}
 
 			app.UseRouting();
+			
 			app.UseAuthentication();
 			app.UseAuthorization();
 			app.UseEndpoints( endpoints =>

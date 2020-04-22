@@ -15,20 +15,16 @@ namespace Sport_A_Lyzer.DependencyInjection
 		public static void RegisterInterfaceImplementations( IServiceCollection services )
 		{
 			services
-				.AddScoped<IQueryHandler<GetGamesByTournamentIdQuery, ICollection<GameResponse>>,
-					GetGamesByTournamentIdQueryHandler>()
-				.AddScoped<IQueryHandler<GetTournamentsByYearQuery, ICollection<TournamentResponse>>,
-					GetTournamentsByYearQueryHandler>()
+				.AddScoped<IQueryHandler<GetGamesByTournamentIdQuery, ICollection<GameResponse>>, GetGamesByTournamentIdQueryHandler>()
+				.AddScoped<IQueryHandler<GetTournamentsByYearQuery, ICollection<TournamentResponse>>, GetTournamentsByYearQueryHandler>()
 				.AddScoped<IQueryHandler<GetGameQuery, GameFollowResponse>, GetGameQueryHandler>()
 				.AddScoped<ICommandHandler<UpsertGameCommand>, UpsertGameCommandHandler>()
 				.AddScoped<ICommandHandler<DeleteGameCommand>, DeleteGameCommandHandler>()
 				.AddScoped<ICommandHandler<UpsertTeamCommand>, UpsertTeamCommandHandler>()
 				.AddScoped<ICommandHandler<UpsertPlayerCommand>, UpsertPlayerCommandHandler>()
 				.AddScoped<ICommandHandler<UpsertGameEventCommand>, UpsertGameEventCommandHandler>()
-				.AddScoped<IQueryHandler<GetGamesGoalStatsQuery, ICollection<GoalStatsResponse>>,
-					GetGamesGoalStatsQueryHandler>()
-				.AddScoped<IQueryHandler<GetTeamsPlayersQuery, ICollection<PlayerResponse>>, GetTeamsPlayersQueryHandler
-				>()
+				.AddScoped<IQueryHandler<GetGamesGoalStatsQuery, ICollection<GoalStatsResponse>>, GetGamesGoalStatsQueryHandler>()
+				.AddScoped<IQueryHandler<GetTeamsPlayersQuery, ICollection<PlayerResponse>>, GetTeamsPlayersQueryHandler>()
 				.AddScoped<ICommandHandler<UpsertGoalCommand>, UpsertGoalCommandHandler>()
 				.AddScoped<IQueryHandler<GetTeamsQuery, ICollection<TeamResponse>>, GetTeamsQueryHandler>()
 				.AddScoped<ICommandHandler<SetGamePauseStatusCommand>, SetGamePauseStatusCommandHandler>()

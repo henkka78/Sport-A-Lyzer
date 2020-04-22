@@ -17,5 +17,8 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 		public string PitchName { get; set; }
 		public string Description { get; set; }
 		public int? PlannedLength { get; set; }
+		public string Result { get; set; }
+		public DateTime? ActualStartTime { get; set; }
+		public DateTime? ActualEndTime { get; set; }
 	}
 }

@@ -21,6 +21,9 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 				.Where( g => g.TournamentId == byTournamentIdQuery.TournamentId )
 				.Include( g => g.AwayTeam )
 				.Include( g => g.HomeTeam )
+				.Include( g => g.Goal )
+				.OrderBy( g => g.GameDay )
+				.ThenBy( g => g.StartTime )
 				.Select( g => new GameResponse()
 				{
 					Id = g.Id,
@@ -32,7 +35,10 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 					StartTime = g.StartTime,
 					PitchName = g.PitchName,
 					Description = g.Description,
-					PlannedLength = g.PlannedLength
+					PlannedLength = g.PlannedLength,
+					ActualStartTime = g.ActualStartTime,
+					ActualEndTime = g.ActualEndTime,
+					Result = $"{g.Goal.Count( goal => goal.TeamId == g.HomeTeamId )} - {g.Goal.Count( goal => goal.TeamId == g.AwayTeamId )}"
 				} ).ToListAsync();
 		}
 	}

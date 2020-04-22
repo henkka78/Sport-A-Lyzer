@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Sport_A_Lyzer.Extensions;
@@ -27,9 +28,9 @@ namespace Sport_A_Lyzer.Services
 			_appSettings = appSettings.Value;
 		}
 
-		public User Authenticate( string username, string password )
+		public async Task<User> Authenticate( string username, string password )
 		{
-			var user = GetUser( username );
+			var user = await GetUser( username );
 
 			if ( user == null )
 			{
@@ -58,9 +59,9 @@ namespace Sport_A_Lyzer.Services
 			return user.WithoutPassword();
 		}
 
-		private User GetUser( string userName )
+		private async Task<User> GetUser( string userName )
 		{
-			return _context.User.SingleOrDefault( u => u.UserName.ToLower() == userName.ToLower() );
+			return await _context.User.SingleOrDefaultAsync( u => u.UserName.ToLower() == userName.ToLower() );
 		}
 
 		private static bool VerifyPassword( User user, string password )
@@ -89,9 +90,9 @@ namespace Sport_A_Lyzer.Services
 			return users.WithoutPasswords();
 		}
 
-		public void AddUser( UserRequest userRequest )
+		public async Task AddUser( UserRequest userRequest )
 		{
-			var user = GetUser( userRequest.UserName );
+			var user = await GetUser( userRequest.UserName );
 			if ( user != null )
 			{
 				throw new InvalidOperationException( "Käyttäjinimi on jo olemassa!" );
@@ -108,7 +109,7 @@ namespace Sport_A_Lyzer.Services
 				RoleId = userRequest.RoleId
 			};
 			_context.User.Add( user );
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 		}
 
 		private string HashPassword( string password )

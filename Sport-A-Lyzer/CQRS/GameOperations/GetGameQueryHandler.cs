@@ -38,6 +38,7 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 					AwayTeamName = g.AwayTeam.Name,
 					AwayTeamId = g.AwayTeamId,
 					IsPaused = IsPaused( g.GamePause ),
+					PausesHeld = g.GamePause.Count,
 					SecondsPlayed = GetPlayedSeconds( g.ActualStartTime.Value, g.GamePause ),
 					GameDay = g.GameDay,
 					StartTime = g.StartTime,

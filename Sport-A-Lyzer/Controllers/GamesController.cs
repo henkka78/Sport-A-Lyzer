@@ -108,7 +108,7 @@ namespace Sport_A_Lyzer.Controllers
 		[HttpPost]
 		public async Task<ActionResult> PostPauseStatusAsync( Guid gameId, SetPauseStatusRequest request )
 		{
-			var command = new SetGamePauseStatusCommand( gameId, request.EventTimeStamp );
+			var command = new SetGamePauseStatusCommand( gameId, request.EventTimeStamp, request.IsActivePause );
 			await _setGamePauseStatusCommandHandler.HandleAsync( command );
 			return Ok();
 		}

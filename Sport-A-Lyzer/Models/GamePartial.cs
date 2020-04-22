@@ -9,7 +9,7 @@ namespace Sport_A_Lyzer.Models
 	{
 		public void StartGame( DateTime timeStamp )
 		{
-			this.ActualStartTime = timeStamp.ToLocalTime();
+			this.ActualStartTime = timeStamp;
 		}
 
 		public void EndGame( DateTime timeStamp )

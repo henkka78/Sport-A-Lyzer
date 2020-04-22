@@ -18,7 +18,8 @@ import { ErrorInterceptor } from './helpers/error.interceptor'
 import { AuthGuard } from './helpers/auth.guard';
 import { HomeComponent } from './components/home/home.component';
 import { UserControlComponent } from './components/user-control/user-control.component';
-import { GameFollowComponent } from './components/game-follow/game-follow.component'
+import { GameFollowComponent } from './components/game-follow/game-follow.component';
+import { LoaderComponent } from './components/loader/loader.component'
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -41,7 +42,8 @@ const appRoutes: Routes = [
     LoginComponent,
     HomeComponent,
     UserControlComponent,
-    GameFollowComponent
+    GameFollowComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

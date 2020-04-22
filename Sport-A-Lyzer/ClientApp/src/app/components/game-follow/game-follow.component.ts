@@ -5,6 +5,8 @@ import { timer } from 'rxjs';
 import { Goal } from "../../models/goal.model";
 import { ModalDirective } from 'ng-uikit-pro-standard';
 import { UUID } from 'angular2-uuid';
+import { Router, ActivatedRoute } from "@angular/router";
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-game-follow',
@@ -37,33 +39,64 @@ export class GameFollowComponent implements OnInit {
   public goals = {
     home: 0,
     away: 0,
-    homeStats: [],
-    awayStats: []
+    homeStats: {
+      scorers: null},
+    awayStats: {
+      scorers:null
+    }
   };
   public saving: boolean;
 
   public scorerSet: boolean;
+  public gameSelectForm: FormGroup;
 
   constructor(
-    private gameService: GameService
+    private gameService: GameService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.gameService.getGamesByTournamentId().subscribe(results => {
-      console.log(results);
       this.games = [];
       results.forEach(result => {
+        let statusText = "(Ei pelattu)";
+        if (result.actualStartTime !== null && result.actualEndTime === null) {
+          statusText = "(Käynnissä)";
+        }
+        if (result.actualEndTime !== null) {
+          statusText = "(Päättynyt, " + result.result + ")";
+        }
         let gameObject = {
           value: result.id,
-          label: result.homeTeamName + " - " + result.awayTeamName
+          label: result.homeTeamName + " - " + result.awayTeamName + " " + statusText
         }
         this.games.push(gameObject);
+        var queryParamsGameId = this.activatedRoute.snapshot.queryParams.selectedGameId;
+        if (queryParamsGameId !== null && queryParamsGameId !== undefined) {
+          this.loadGame(queryParamsGameId);
+          this.gameSelectForm = new FormGroup({
+            gameSelect: new FormControl(queryParamsGameId)
+          });
+        } else {
+          this.gameSelectForm = new FormGroup({
+            gameSelect: new FormControl()
+          });
+        }
         this.gamesLoaded = true;
       });
     });
   }
 
   public gameSelect(event) {
+    this.router.navigate([],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams: {
+          selectedGameId: event.value
+        },
+        queryParamsHandling: "merge"
+      });
     this.loadGame(event.value);
   }
 
@@ -71,9 +104,9 @@ export class GameFollowComponent implements OnInit {
     this.gameService.getGame(gameId).subscribe(result => {
       this.resetGame();
       this.currentGame = result;
+      this.gameEnded = this.currentGame.actualEndTime !== null;
       if (this.currentGame.actualStartTime !== null && this.currentGame.actualEndTime === null) {
         this.secondsPlayed = Math.floor((new Date().getTime() - new Date(this.currentGame.actualStartTime).getTime()) / 1000);
-        console.log(new Date().toLocaleString());
         this.minutes = Math.floor(this.secondsPlayed / 60);
         this.seconds = this.secondsPlayed % 60;
         this.startClock();
@@ -86,7 +119,6 @@ export class GameFollowComponent implements OnInit {
         this.goals.awayStats = this.currentGame.goalStats.find(gs => gs.teamId === this.currentGame.awayTeamId);
       }
       this.gameSelected = true;
-      console.log(this.currentGame);
       this.saving = false;
       this.scorerModal.hide();
     });
@@ -101,9 +133,14 @@ export class GameFollowComponent implements OnInit {
     this.goals = {
       home: 0,
       away: 0,
-      homeStats: [],
-      awayStats: []
+      homeStats: {
+        scorers: null
+      },
+      awayStats: {
+        scorers: null
+      }
     };
+
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
@@ -152,11 +189,9 @@ export class GameFollowComponent implements OnInit {
       this.loadGame(this.currentGame.id);
     });
 
-    console.log(this.scoredGoal);
   }
   public startGame() {
     this.gameService.startGame(this.currentGame.id, { StartTime: new Date() }).subscribe(() => {
-      console.log("Started!");
     });
     this.gameOn = true;
     this.startClock();
@@ -165,16 +200,21 @@ export class GameFollowComponent implements OnInit {
   public endGame() {
     this.gameEnded = true;
     this.gameService.endGame(this.currentGame.id, { EndTime: new Date() }).subscribe(() => {
-      console.log("Ended!");
+      this.loadGame(this.currentGame.id);
     });
     this.timerSubscription.unsubscribe();
   }
 
   public pauseGame() {
     if (this.gamePaused) {
+      this.gameService.setGamePauseStatus(this.currentGame.id, { eventTimeStamp: new Date(), isActivePause: true })
+        .subscribe(() => this.loadGame(this.currentGame.id));
       this.gamePaused = false;
+
       this.startClock();
     } else {
+      this.gameService.setGamePauseStatus(this.currentGame.id, { eventTimeStamp: new Date(), isActivePause: false })
+        .subscribe(() => console.log("Paused"));
       this.timerSubscription.unsubscribe();
       this.gamePaused = true;
     }

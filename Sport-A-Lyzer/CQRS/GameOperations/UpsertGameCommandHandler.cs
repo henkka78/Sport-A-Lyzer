@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sport_A_Lyzer.Helpers;
 using Sport_A_Lyzer.Models;
 
 namespace Sport_A_Lyzer.CQRS.GameOperations
@@ -20,8 +21,12 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 			game.TournamentId = command.Request.TournamentId;
 			game.AwayTeamId = command.Request.AwayTeamId;
 			game.HomeTeamId = command.Request.HomeTeamId;
-			game.StartTime = command.Request.StartTime;
-			game.GameDay = command.Request.GameDay;
+			game.StartTime = command.Request.StartTime != null
+				? LocalTimeProvider.GetLocalTime( command.Request.StartTime.Value )
+				: ( DateTime? )null;
+			game.GameDay = command.Request.GameDay != null
+				? LocalTimeProvider.GetLocalTime(command.Request.GameDay.Value)
+				: (DateTime?) null;
 			game.PlannedLength = command.Request.PlannedLength;
 
 			await _context.SaveChangesAsync();
