@@ -24,8 +24,8 @@ export class TeamComponent implements OnInit {
   public isNewTeam: boolean;
   public playerModalHeader: string;
 
-  @ViewChild('playerModal', { static: false }) playerEditorModal: ModalDirective;
-  @ViewChild('teamModal', { static: false }) teamEditorModal: ModalDirective;
+  @ViewChild('playerModal') playerEditorModal: ModalDirective;
+  @ViewChild('teamModal') teamEditorModal: ModalDirective;
 
   constructor(
     private teamService: TeamService,

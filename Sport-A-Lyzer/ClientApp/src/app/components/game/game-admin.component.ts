@@ -12,7 +12,7 @@ import { ModalDirective } from 'ng-uikit-pro-standard';
   styleUrls: ['./game-admin.component.scss']
 })
 export class GameAdminComponent implements OnInit {
-  @ViewChild('gameModal', { static: false }) gameEditorModal: ModalDirective;
+  @ViewChild('gameModal') gameEditorModal: ModalDirective;
 
   public games: Game[];
   public teams: Team[];

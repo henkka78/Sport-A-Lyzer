@@ -17,7 +17,7 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   styleUrls: ['./game-follow.component.scss']
 })
 export class GameFollowComponent implements OnInit {
-  @ViewChild('scorerModal', { static: false }) scorerModal: ModalDirective;
+  @ViewChild('scorerModal') scorerModal: ModalDirective;
 
   public minutes: number = 0;
   public seconds: number = 0;
