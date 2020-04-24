@@ -1,4 +1,10 @@
+using System;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using Autofac;
+using Autofac.Core;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Sport_A_Lyzer.CQRS;
+using Sport_A_Lyzer.DependencyInjection;
 using Sport_A_Lyzer.Helpers;
 using Sport_A_Lyzer.Models;
 using Sport_A_Lyzer.Services;
@@ -35,7 +43,7 @@ namespace Sport_A_Lyzer
 				options.AddPolicy( name: CorsPolicyName,
 					builder =>
 					{
-						builder.WithOrigins("http://bloodyhanks.com", "http://www.bloodyhanks.com")
+						builder.WithOrigins( "http://bloodyhanks.com", "http://www.bloodyhanks.com" )
 							.AllowAnyMethod()
 							.AllowAnyHeader();
 					} );
@@ -48,7 +56,7 @@ namespace Sport_A_Lyzer
 				configuration.RootPath = "ClientApp/dist/ng-uikit-pro-standard";
 			} );
 			services.AddControllers();
-			
+
 
 			var appSettingsSection = Configuration.GetSection( "AppSettings" );
 			services.Configure<AppSettings>( appSettingsSection );
@@ -80,13 +88,16 @@ namespace Sport_A_Lyzer
 				options.UseSqlServer( Configuration.GetConnectionString( "AppDatabase" ) ) );
 			services.AddScoped<IUserService, UserService>();
 
-			DependencyInjection.Bootstrap.RegisterInterfaceImplementations( services );
+			services.AddCqrsHandlers(typeof( ICommandHandler<> ) );
+			services.AddCqrsHandlers(typeof( IQueryHandler<,>) );
+
 			services.AddSwaggerGen( c =>
 			{
 				c.SwaggerDoc( "v1", new OpenApiInfo { Title = "SportALyzer_API", Version = "v1" } );
 			} );
 		}
 
+		
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure( IApplicationBuilder app, IWebHostEnvironment env )
 		{
@@ -116,7 +127,7 @@ namespace Sport_A_Lyzer
 			}
 
 			app.UseRouting();
-			
+
 			app.UseAuthentication();
 			app.UseAuthorization();
 			app.UseEndpoints( endpoints =>
@@ -132,7 +143,8 @@ namespace Sport_A_Lyzer
 
 				 if ( env.IsDevelopment() )
 				 {
-					 spa.UseAngularCliServer( npmScript: "start" );
+					 spa.Options.StartupTimeout = new TimeSpan( 0, 8, 0 );
+					 spa.UseProxyToSpaDevelopmentServer( "http://localhost:4200" );
 				 }
 			 } );
 		}

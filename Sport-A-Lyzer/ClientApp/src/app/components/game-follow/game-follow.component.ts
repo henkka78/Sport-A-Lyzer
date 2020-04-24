@@ -108,8 +108,9 @@ export class GameFollowComponent implements OnInit {
   }
 
   public copyLink(): void {
-    this.clipboardService.copyFromContent("whatsapp://send?text=bloodyhanks.com/game/" + this.currentGame.id);
-    this.toastService.success("Linkki kopioitu leikepöydälle!");
+    this.clipboardService.copyFromContent("http://www.bloodyhanks.com/game/" + this.currentGame.id);
+    const options = { opacity: 1 };
+    this.toastService.success("", "Linkki kopioitu leikepöydälle!", options);
   }
 
   private loadGame(gameId: string, setClock: boolean): void {
