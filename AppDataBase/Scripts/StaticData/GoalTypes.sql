@@ -1,6 +1,6 @@
-﻿SET IDENTITY_INSERT [dbo].[GoalTypes] ON
+﻿SET IDENTITY_INSERT [dbo].[GoalType] ON
 
-MERGE INTO [dbo].[GoalTypes] AS Target
+MERGE INTO [dbo].[GoalType] AS Target
 USING (VALUES
   (1,'Maali',NULL,1,1)
  ,(2,'Kahden pisteen heitto',NULL,2,2)
@@ -25,5 +25,5 @@ WHEN NOT MATCHED BY SOURCE THEN
 
 GO
 
-SET IDENTITY_INSERT [dbo].[GoalTypes] OFF
+SET IDENTITY_INSERT [dbo].[GoalType] OFF
 GO

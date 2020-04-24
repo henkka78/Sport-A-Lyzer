@@ -1,0 +1,13 @@
+﻿CREATE TABLE [dbo].[Goal]
+(
+	[ID] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [TeamID] UNIQUEIDENTIFIER NOT NULL, 
+    [GameID] UNIQUEIDENTIFIER NOT NULL, 
+    [PlayerID] UNIQUEIDENTIFIER NOT NULL, 
+    [GoalTypeID] INT NOT NULL, 
+    [MinuteOfGame] INT NOT NULL, 
+    CONSTRAINT [FK_Goals_Teams] FOREIGN KEY ([TeamID]) REFERENCES [Team]([ID]), 
+    CONSTRAINT [FK_Goals_Games] FOREIGN KEY ([GameID]) REFERENCES [Game]([ID]), 
+    CONSTRAINT [FK_Goals_Players] FOREIGN KEY ([PlayerID]) REFERENCES [Player]([ID]), 
+    CONSTRAINT [FK_Goals_GoalTypes] FOREIGN KEY ([GoalTypeID]) REFERENCES [GoalType]([ID]) 
+)

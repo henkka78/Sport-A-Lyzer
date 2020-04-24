@@ -1,8 +1,8 @@
-﻿SET IDENTITY_INSERT dbo.Sports ON;
+﻿SET IDENTITY_INSERT dbo.Sport ON;
 
 GO
 
-MERGE INTO [dbo].[Sports] AS Target
+MERGE INTO [dbo].[Sport] AS Target
 USING (VALUES
   (1,'Football','Trump people call it soccer')
  ,(2,'Basketball',NULL)
@@ -23,6 +23,6 @@ WHEN NOT MATCHED BY SOURCE THEN
 
 GO
 
-SET IDENTITY_INSERT dbo.Sports OFF;
+SET IDENTITY_INSERT dbo.Sport OFF;
 
 GO

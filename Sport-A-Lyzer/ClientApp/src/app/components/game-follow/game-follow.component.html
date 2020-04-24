@@ -1,0 +1,79 @@
+<div class="col-lg-4 col-sm-12 text-center jumbotron grey lighten-2">
+  <div class="md-form mt-3 mb-5" *ngIf="gamesLoaded">
+    <form [formGroup]="gameSelectForm">
+    <mdb-select [options]="games" placeholder="Valitse peli" formControlName="gameSelect" (selected)="gameSelect($event)"></mdb-select>
+    </form>
+  </div>
+  <ng-container *ngIf="!gameEnded && gameSelected">
+    <div class="row">
+      <h3 class="mx-auto" *ngIf="gameOn">
+        {{minutes}}:{{secondsString}}
+        <mdb-icon far icon="futbol" class="animated bounce infinite" *ngIf="!gamePaused && !gameEnded"></mdb-icon>
+        <mdb-icon far icon="futbol" class="animated rollOut" *ngIf="gamePaused || gameEnded"></mdb-icon>
+      </h3>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button mdbBtn *ngIf="!gameOn" type="button" [disabled]="gameEnded" class="mdb-color darken-4 text-white" rounded="true" (click)="startGame()" mdbWavesEffect>Aloita peli</button>
+        <button mdbBtn *ngIf="gameOn && currentGame.pausesHeld > 0" type="button" [disabled]="gameEnded" class="mdb-color darken-4 text-white" rounded="true" (click)="endGame()" mdbWavesEffect>Lopeta peli</button>
+        <button mdbBtn *ngIf="gameOn && !gamePaused && currentGame.pausesHeld==0" [disabled]="gameEnded" type="button" class="mdb-color darken-4 text-white" rounded="true" (click)="pauseGame()" mdbWavesEffect>Aloita tauko</button>
+        <button mdbBtn *ngIf="gameOn && gamePaused && currentGame.pausesHeld==0" [disabled]="gameEnded" type="button" class="mdb-color darken-4 text-white" rounded="true" (click)="pauseGame()" mdbWavesEffect>Aloita toinen puoliaika</button>
+      </div>
+
+    </div>
+  </ng-container>
+  <div class="row mt-4" *ngIf="gameSelected">
+    <div class="col-5">
+      <h1 class="float-right">{{goals.home}}</h1>
+    </div>
+    <div class="col-2">
+      <h1 class="mx-auto">-</h1>
+    </div>
+    <div class="col-5">
+      <h1 class="float-left">{{goals.away}}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6 border-right">
+      <button mdbBtn *ngIf="gameOn && !gameEnded" type="button" [disabled]="gameEnded || gamePaused" class="text-white blue-gradient" rounded="true" (click)="goal(currentGame.homeTeamId)" mdbWavesEffect>MAALI<br />{{currentGame.homeTeamName}}</button>
+      <ul class="list-group mt-3" *ngIf="gameSelected && goals.homeStats!==null && goals.homeStats!==undefined">
+        <li *ngFor="let scorer of goals.homeStats.scorers" class="list-group-item grey lighten-5" style="font-size: 0.8em; color: black; text-align: left;" mdbWavesEffect>
+          {{scorer.name}} {{scorer.minutes.join("', ")}}'
+        </li>
+      </ul>
+    </div>
+    <div class="col-6">
+      <button mdbBtn *ngIf="gameOn && !gameEnded" type="button" [disabled]="gameEnded || gamePaused" class="text-white blue-gradient" rounded="true" (click)="goal(currentGame.awayTeamId)" mdbWavesEffect>MAALI<br />{{currentGame.awayTeamName}}</button>
+      <ul class="list-group mt-3" *ngIf="gameSelected && goals.awayStats!==null && goals.awayStats!==undefined">
+        <li *ngFor="let scorer of goals.awayStats.scorers" class="list-group-item grey lighten-5" style="font-size: 0.8em; color: black; text-align: left;" mdbWavesEffect>
+          {{scorer.name}} {{scorer.minutes.join("', ")}}'
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row mt-2" *ngIf="gameSelected">
+    <button mdbBtn type="button" rounded="true" (click)="copyLink()" class="mx-auto purple-gradient text-white"><mdb-icon fas icon="copy" class="mr-1"></mdb-icon>Kopioi linkki peliin</button>
+  </div>
+</div>
+
+<div mdbModal #scorerModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="scorerModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header grey darken-2 text-white font-weigth-bold">
+        VALITSE MAALINTEKIJÄ
+      </div>
+      <div class="modal-body">
+        <div class="list-group" *ngIf="goalScored">
+          <a *ngFor="let player of currentGame.players[scoredGoal.teamId]" (click)="setScorer(player.playerId)" class="list-group-item list-group-item-action waves-light" mdbWavesEffect>
+            {{player.playerNumber}} - {{player.firstName}} {{player.lastName}}
+          </a>
+        </div>
+        <h4 class="mt-3 ml-1 font-weigth-bold">Valittu: {{scorer.scorerName}}</h4>
+        <button class="mt-2" mdbBtn type="button" [disabled]="!scorerSet || saving" color="primary" rounded="true" (click)="saveGoal()" mdbWavesEffect>
+          Hyväksy
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

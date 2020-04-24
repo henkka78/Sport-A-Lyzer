@@ -1,0 +1,46 @@
+<form class="text-center"
+      style="color: #757575;"
+      [formGroup]="playerForm"
+      (ngSubmit)="onSubmit()">
+  <div class="md-form mt-3">
+    <input type="text"
+           formControlName="playerFormFirstName"
+           id="materialPlayerFormFirstName"
+           class="form-control"
+           mdbInput />
+    <label for="materialPlayerFormFirstName">Etunimi</label>
+    <!--<mdb-error *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">Input invalid</mdb-error>
+    <mdb-success *ngIf="firstName.valid && (firstName.dirty || firstName.touched)">Input valid</mdb-success>-->
+  </div>
+  <div class="md-form mt-3">
+    <input type="text"
+           formControlName="playerFormLastName"
+           id="materialPlayerFormLastName"
+           class="form-control"
+           mdbInput />
+    <label for="materialPlayerFormLastName">Sukunimi</label>
+    <!--<mdb-error *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">Input invalid</mdb-error>
+    <mdb-success *ngIf="lastName.valid && (lastName.dirty || lastName.touched)">Input valid</mdb-success>-->
+  </div>
+  <div class="md-form mt-3">
+    <input type="number"
+           formControlName="playerFormNumber"
+           id="materialPlayerFormNumber"
+           class="form-control"
+           mdbInput />
+    <label for="materialPlayerFormNumber">Numero</label>
+    <!--<mdb-error *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">Input invalid</mdb-error>
+    <mdb-success *ngIf="lastName.valid && (lastName.dirty || lastName.touched)">Input valid</mdb-success>-->
+  </div>
+  <button mdbBtn
+          color="info"
+          outline="true"
+          rounded="true"
+          block="true"
+          class="z-depth-0 my-4 waves-effect"
+          mdbWavesEffect
+          type="submit">
+    Tallenna pelaaja
+    <mdb-spinner *ngIf="saving" spinnerColor="blue"></mdb-spinner>
+  </button>
+</form>

@@ -1,2 +1,4 @@
 .vs/
 /AppDataBase/obj/Debug
+/AppDataBase/bin/Debug
+/AppDataBase
