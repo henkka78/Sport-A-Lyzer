@@ -19,6 +19,8 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 		{
 			return await _context.Game
 				.Where( g => g.TournamentId == byTournamentIdQuery.TournamentId )
+				.OrderBy( g => g.ActualStartTime )
+				.ThenBy( g => g.GameDay )
 				.Include( g => g.AwayTeam )
 				.Include( g => g.HomeTeam )
 				.Include( g => g.Goal )

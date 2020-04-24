@@ -3,10 +3,13 @@ import { GameService } from '../../services/game.service';
 import { Game } from '../../models/game.model';
 import { timer } from 'rxjs';
 import { Goal } from "../../models/goal.model";
-import { ModalDirective } from 'ng-uikit-pro-standard';
+import { ModalDirective, ToastService } from 'ng-uikit-pro-standard';
 import { UUID } from 'angular2-uuid';
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl } from '@angular/forms';
+import { ClipboardService } from 'ngx-clipboard'
+
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 @Component({
   selector: 'app-game-follow',
@@ -40,20 +43,23 @@ export class GameFollowComponent implements OnInit {
     home: 0,
     away: 0,
     homeStats: {
-      scorers: null},
+      scorers: null
+    },
     awayStats: {
-      scorers:null
+      scorers: null
     }
   };
   public saving: boolean;
 
   public scorerSet: boolean;
   public gameSelectForm: FormGroup;
-
+  public whatAppHref: string;
   constructor(
     private gameService: GameService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private clipboardService: ClipboardService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -72,19 +78,20 @@ export class GameFollowComponent implements OnInit {
           label: result.homeTeamName + " - " + result.awayTeamName + " " + statusText
         }
         this.games.push(gameObject);
-        var queryParamsGameId = this.activatedRoute.snapshot.queryParams.selectedGameId;
-        if (queryParamsGameId !== null && queryParamsGameId !== undefined) {
-          this.loadGame(queryParamsGameId);
-          this.gameSelectForm = new FormGroup({
-            gameSelect: new FormControl(queryParamsGameId)
-          });
-        } else {
-          this.gameSelectForm = new FormGroup({
-            gameSelect: new FormControl()
-          });
-        }
-        this.gamesLoaded = true;
+
       });
+      var queryParamsGameId = this.activatedRoute.snapshot.queryParams.selectedGameId;
+      if (queryParamsGameId !== null && queryParamsGameId !== undefined) {
+        this.loadGame(queryParamsGameId, true);
+        this.gameSelectForm = new FormGroup({
+          gameSelect: new FormControl(queryParamsGameId)
+        });
+      } else {
+        this.gameSelectForm = new FormGroup({
+          gameSelect: new FormControl()
+        });
+      }
+      this.gamesLoaded = true;
     });
   }
 
@@ -97,19 +104,29 @@ export class GameFollowComponent implements OnInit {
         },
         queryParamsHandling: "merge"
       });
-    this.loadGame(event.value);
+    this.loadGame(event.value, true);
   }
 
-  private loadGame(gameId) {
+  public copyLink(): void {
+    this.clipboardService.copyFromContent("whatsapp://send?text=bloodyhanks.com/game/" + this.currentGame.id);
+    this.toastService.success("Linkki kopioitu leikepöydälle!");
+  }
+
+  private loadGame(gameId: string, setClock: boolean): void {
     this.gameService.getGame(gameId).subscribe(result => {
-      this.resetGame();
+      this.resetGame(false);
       this.currentGame = result;
       this.gameEnded = this.currentGame.actualEndTime !== null;
       if (this.currentGame.actualStartTime !== null && this.currentGame.actualEndTime === null) {
-        this.secondsPlayed = Math.floor((new Date().getTime() - new Date(this.currentGame.actualStartTime).getTime()) / 1000);
-        this.minutes = Math.floor(this.secondsPlayed / 60);
-        this.seconds = this.secondsPlayed % 60;
-        this.startClock();
+        if (setClock) {
+
+          this.secondsPlayed = this.currentGame.secondsPlayed;
+          this.minutes = Math.floor(this.secondsPlayed / 60);
+          this.seconds = this.secondsPlayed % 60;
+          this.startClock();
+        }
+
+
         this.gameOn = true;
       }
       this.goals.home = this.countGoals(this.currentGame.homeTeamId);
@@ -119,15 +136,15 @@ export class GameFollowComponent implements OnInit {
         this.goals.awayStats = this.currentGame.goalStats.find(gs => gs.teamId === this.currentGame.awayTeamId);
       }
       this.gameSelected = true;
+
+
       this.saving = false;
       this.scorerModal.hide();
     });
   }
 
-  private resetGame() {
-    this.secondsPlayed = 0;
-    this.minutes = 0;
-    this.seconds = 0;
+
+  private resetGame(stopClock: boolean = false) {
     this.gameOn = false;
     this.gameSelected = false;
     this.goals = {
@@ -141,8 +158,11 @@ export class GameFollowComponent implements OnInit {
       }
     };
 
-    if (this.timerSubscription) {
+    if (this.timerSubscription && stopClock) {
       this.timerSubscription.unsubscribe();
+      this.secondsPlayed = 0;
+      this.minutes = 0;
+      this.seconds = 0;
     }
   }
 
@@ -171,6 +191,10 @@ export class GameFollowComponent implements OnInit {
 
     }
     this.goalScored = true;
+    this.scorer = {
+      scorerId: null,
+      scorerName: null
+    }
     this.scorerModal.show();
   }
 
@@ -185,11 +209,11 @@ export class GameFollowComponent implements OnInit {
   public saveGoal() {
     this.saving = true;
     this.gameService.putGoal(UUID.UUID(), this.scoredGoal).subscribe(() => {
-      this.timerSubscription.unsubscribe();
-      this.loadGame(this.currentGame.id);
+      this.loadGame(this.currentGame.id, false);
     });
 
   }
+
   public startGame() {
     this.gameService.startGame(this.currentGame.id, { StartTime: new Date() }).subscribe(() => {
     });
@@ -200,7 +224,7 @@ export class GameFollowComponent implements OnInit {
   public endGame() {
     this.gameEnded = true;
     this.gameService.endGame(this.currentGame.id, { EndTime: new Date() }).subscribe(() => {
-      this.loadGame(this.currentGame.id);
+      this.loadGame(this.currentGame.id, false);
     });
     this.timerSubscription.unsubscribe();
   }
@@ -208,7 +232,7 @@ export class GameFollowComponent implements OnInit {
   public pauseGame() {
     if (this.gamePaused) {
       this.gameService.setGamePauseStatus(this.currentGame.id, { eventTimeStamp: new Date(), isActivePause: true })
-        .subscribe(() => this.loadGame(this.currentGame.id));
+        .subscribe(() => this.loadGame(this.currentGame.id, false));
       this.gamePaused = false;
 
       this.startClock();

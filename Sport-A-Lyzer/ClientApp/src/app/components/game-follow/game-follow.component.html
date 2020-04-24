@@ -51,6 +51,9 @@
       </ul>
     </div>
   </div>
+  <div class="row mt-2" *ngIf="gameSelected">
+    <button mdbBtn type="button" color="info" rounded="true" (click)="copyLink()" class="mx-auto"><mdb-icon fas icon="copy" class="mr-1"></mdb-icon>Kopioi linkki peliin</button>
+  </div>
 </div>
 
 <div mdbModal #scorerModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="scorerModalLabel" aria-hidden="true">
@@ -67,7 +70,7 @@
         </div>
         <h4 class="mt-3 ml-1 font-weigth-bold">Valittu: {{scorer.scorerName}}</h4>
         <button class="mt-2" mdbBtn type="button" [disabled]="!scorerSet || saving" color="primary" rounded="true" (click)="saveGoal()" mdbWavesEffect>
-          Hyväksy <mdb-spinner *ngIf="saving" spinnerColor="white"></mdb-spinner>
+          Hyväksy
         </button>
       </div>
 

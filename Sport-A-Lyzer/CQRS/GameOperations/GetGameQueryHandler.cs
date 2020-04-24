@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sport_A_Lyzer.CQRS.GoalOperations;
 using Sport_A_Lyzer.CQRS.PlayerOperations;
+using Sport_A_Lyzer.Helpers;
 using Sport_A_Lyzer.Models;
 
 namespace Sport_A_Lyzer.CQRS.GameOperations
@@ -115,7 +116,7 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 				return ( int )( activePause.StartTime - gameStartTime ).TotalSeconds - secondsPaused;
 			}
 
-			return ( int )( DateTime.Now - gameStartTime ).TotalSeconds - secondsPaused;
+			return ( int )( LocalTimeProvider.GetLocalTime( DateTime.Now ) - gameStartTime ).TotalSeconds - secondsPaused;
 		}
 	}
 }

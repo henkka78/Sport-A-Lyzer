@@ -10,4 +10,5 @@ export class Game {
   goalStats: any;
   result: string;
   pausesHeld: number;
+  secondsPlayed: number;
 }

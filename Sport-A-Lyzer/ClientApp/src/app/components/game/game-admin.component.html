@@ -1,11 +1,10 @@
-<div class="jumbotron col-lg-6">
+<div class="jumbotron col-lg-6 col-sm-12 h-75">
   <h4>Pelien lisäys ja muokkaus</h4>
-  <table mdbTable class="col-12">
+  <table mdbTable mdbTableScroll scrollY="true" maxHeight="500" class="col-12">
     <thead>
       <tr>
-        <th scope="col">Kotijoukkue</th>
-        <th scope="col">Vierasjoukkue</th>
-        <th scope="col">Pelipäivä</th>
+        <th scope="col">Joukkueet</th>
+        <th scope="col" class="d-none">Pelipäivä</th>
         <th scope="col">Lopputulos</th>
         <th scope="col">
           <a (click)="addGame()">
@@ -16,9 +15,8 @@
     </thead>
     <tbody>
       <tr mdbTableCol *ngFor="let game of games">
-        <td>{{game.homeTeamName}}</td>
-        <td>{{game.awayTeamName}}</td>
-        <td>{{ game.gameDay | date:'dd.MM.yyyy' }}</td>
+        <td>{{game.homeTeamName}} - {{game.awayTeamName}}</td>
+        <td class="d-none">{{ game.gameDay | date:'dd.MM.yyyy' }}</td>
         <td>{{game.result}}</td>
         <td>
           <a (click)="editGame(game.id)">
@@ -29,7 +27,7 @@
     </tbody>
   </table>
 </div>
-<div mdbModal #gameModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gameModalLabel" aria-hidden="true">
+<div mdbModal #gameModal="mdbModal" class="modal fade" style="overflow-y: auto" tabindex="-1" role="dialog" aria-labelledby="gameModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header grey darken-2 text-white font-weigth-bold">

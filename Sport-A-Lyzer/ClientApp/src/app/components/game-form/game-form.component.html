@@ -1,35 +1,26 @@
 <form style="color: #757575;"
       [formGroup]="gameForm"
       (ngSubmit)="onSubmit()">
-  <!--<div class="md-form mt-3">
-      <input type="text"
-             formControlName="gameFormName"
-             id="materialGameFormName"
-             class="form-control"
-             mdbInput />
-      <label for="materialGameFormName">Joukkueen nimi</label>
-      <mdb-error *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">Input invalid</mdb-error>
-  <mdb-success *ngIf="firstName.valid && (firstName.dirty || firstName.touched)">Input valid</mdb-success>
-    </div>-->
-  <div class="md-form mt-3">
+
+  <div class="md-form mt-1">
     <mdb-select [options]="teams" placeholder="Kotijoukkue" formControlName="gameFormHomeTeam"></mdb-select>
   </div>
   <div class="md-form mt-3">
     <mdb-select [options]="teams" placeholder="Vierasjoukkue" formControlName="gameFormAwayTeam"></mdb-select>
   </div>
-  <div class="md-form mt-3">
+  <div class="md-form mt-2">
     <mdb-date-picker [options]="gameDatePickerOptions"
                      [placeholder]="'Valitse päivä'"
                      formControlName="gameFormDate"></mdb-date-picker>
   </div>
   <br /><br />
-  <div class="md-form mt-3">
+  <div class="md-form mt-2">
     <mdb-time-picker [twelvehour]="false"
                      [placeholder]="'Valitse aika'"
                      class=""
                      formControlName="gameFormTime"></mdb-time-picker>
   </div>
-  <div class="md-form mt-3">
+  <div class="md-form mt-2">
     <input type="text"
            formControlName="gameFormPitch"
            id="materialGameFormPitch"
