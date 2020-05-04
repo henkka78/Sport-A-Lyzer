@@ -18,7 +18,7 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 })
 export class GameFollowComponent implements OnInit {
   @ViewChild('scorerModal') scorerModal: ModalDirective;
-
+  //Käyttöliittymän muoto ja toiminta hakevat vielä uriaan. Muuttujaviidakko on tässä versiossa hieman sekava ja turhan tiheä. Sieventyy, kunhan ehtii...
   public minutes: number = 0;
   public seconds: number = 0;
   public secondsString: string;
@@ -63,6 +63,10 @@ export class GameFollowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loadGameList();
+  }
+
+  private loadGameList(): void {
     this.gameService.getGamesByTournamentId().subscribe(results => {
       this.games = [];
       results.forEach(result => {
@@ -105,6 +109,18 @@ export class GameFollowComponent implements OnInit {
         queryParamsHandling: "merge"
       });
     this.loadGame(event.value, true);
+  }
+
+  public exitGame(): void {
+    this.gameSelected = false;
+    this.gamesLoaded = false;
+    this.router.navigate([],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams: { selectedGameId:null},
+        queryParamsHandling: "merge"
+      });
+    this.loadGameList();
   }
 
   public copyLink(): void {
