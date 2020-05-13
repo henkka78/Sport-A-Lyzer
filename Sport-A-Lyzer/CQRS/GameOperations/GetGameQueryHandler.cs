@@ -109,7 +109,7 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 
 				   return total;
 			   } );
-
+			   
 			var activePause = gamePauses.SingleOrDefault( gp => gp.EndTime == null );
 			if ( activePause != null )
 			{

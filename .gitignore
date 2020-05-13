@@ -2,3 +2,6 @@
 /AppDataBase/obj/Debug
 /AppDataBase/bin/Debug
 /AppDataBase
+/Tests/bin/Debug/netcoreapp3.1
+/Tests/obj/Debug/netcoreapp3.1
+/Tests/obj
