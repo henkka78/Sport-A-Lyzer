@@ -1,7 +1,8 @@
 <div class="col-lg-4 col-sm-12 text-center jumbotron grey lighten-2">
   <div class="md-form mt-3 mb-5" *ngIf="gamesLoaded && !gameSelected">
     <form [formGroup]="gameSelectForm">
-      <mdb-select [options]="games" placeholder="Valitse peli" formControlName="gameSelect" (selected)="gameSelect($event)"></mdb-select>
+      <mdb-select [options]="games" [visibleOptions]="8" placeholder="Valitse seurattava peli" formControlName="gameSelect" (selected)="gameSelect($event)"></mdb-select>
+      <mdb-select [options]="endedGames" [visibleOptions]="8" placeholder="Valitse pelattu peli" formControlName="gameSelect" (selected)="gameSelect($event)"></mdb-select>
     </form>
   </div>
   <div class="col-12" *ngIf="gameSelected">

@@ -11,4 +11,5 @@ export class Game {
   result: string;
   pausesHeld: number;
   secondsPlayed: number;
+  gameDay: string;
 }

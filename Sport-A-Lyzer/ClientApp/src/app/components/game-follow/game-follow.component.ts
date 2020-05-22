@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { GameService } from '../../services/game.service';
 import { Game } from '../../models/game.model';
 import { timer } from 'rxjs';
@@ -7,7 +8,8 @@ import { ModalDirective, ToastService } from 'ng-uikit-pro-standard';
 import { UUID } from 'angular2-uuid';
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl } from '@angular/forms';
-import { ClipboardService } from 'ngx-clipboard'
+import { ClipboardService } from 'ngx-clipboard';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -17,6 +19,7 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   styleUrls: ['./game-follow.component.scss']
 })
 export class GameFollowComponent implements OnInit {
+
   @ViewChild('scorerModal') scorerModal: ModalDirective;
   //Käyttöliittymän muoto ja toiminta hakevat vielä uriaan. Muuttujaviidakko on tässä versiossa hieman sekava ja turhan tiheä. Sieventyy, kunhan ehtii...
   public minutes: number = 0;
@@ -30,11 +33,14 @@ export class GameFollowComponent implements OnInit {
   public gameEnded: boolean;
   public timerSubscription;
   public games: any[];
+  public endedGames: any[];
   public gamesLoaded: boolean;
   public gameSelected: boolean;
   public currentGame: Game;
   public scoredGoal: Goal;
   public goalScored: boolean;
+  private focusLost: boolean;
+  private isMobile: boolean;
   public scorer: any = {
     scorerId: null,
     scorerName: null
@@ -59,29 +65,32 @@ export class GameFollowComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private clipboardService: ClipboardService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private deviceService: DeviceDetectorService
   ) { }
 
   ngOnInit() {
+    this.isMobile = this.deviceService.isMobile();
     this.loadGameList();
+
   }
+
 
   private loadGameList(): void {
     this.gameService.getGamesByTournamentId().subscribe(results => {
       this.games = [];
+      this.endedGames = [];
       results.forEach(result => {
-        let statusText = "(Ei pelattu)";
-        if (result.actualStartTime !== null && result.actualEndTime === null) {
-          statusText = "(Käynnissä)";
-        }
-        if (result.actualEndTime !== null) {
-          statusText = "(Päättynyt, " + result.result + ")";
-        }
+
         let gameObject = {
           value: result.id,
-          label: result.homeTeamName + " - " + result.awayTeamName + " " + statusText
+          label: (result.gameDay != null ? formatDate(result.gameDay, "d.M", "en-EN") + "  :  " : "") + result.homeTeamName + " - " + result.awayTeamName
         }
-        this.games.push(gameObject);
+        if (result.actualEndTime === null) {
+          this.games.push(gameObject);
+        } else {
+          this.endedGames.push(gameObject);
+        }
 
       });
       var queryParamsGameId = this.activatedRoute.snapshot.queryParams.selectedGameId;
@@ -117,7 +126,7 @@ export class GameFollowComponent implements OnInit {
     this.router.navigate([],
       {
         relativeTo: this.activatedRoute,
-        queryParams: { selectedGameId:null},
+        queryParams: { selectedGameId: null },
         queryParamsHandling: "merge"
       });
     this.loadGameList();
@@ -137,10 +146,7 @@ export class GameFollowComponent implements OnInit {
       if (this.currentGame.actualStartTime !== null && this.currentGame.actualEndTime === null) {
         if (setClock) {
 
-          this.secondsPlayed = this.currentGame.secondsPlayed;
-          this.minutes = Math.floor(this.secondsPlayed / 60);
-          this.seconds = this.secondsPlayed % 60;
-          this.startClock();
+          this.setClock(this.currentGame.secondsPlayed);
         }
 
 
@@ -160,6 +166,12 @@ export class GameFollowComponent implements OnInit {
     });
   }
 
+  private setClock(secondsPlayed: number): void {
+    this.secondsPlayed = secondsPlayed;
+    this.minutes = Math.floor(this.secondsPlayed / 60);
+    this.seconds = this.secondsPlayed % 60;
+    this.startClock();
+  }
 
   private resetGame(stopClock: boolean = false) {
     this.gameOn = false;
@@ -263,6 +275,24 @@ export class GameFollowComponent implements OnInit {
 
   private startClock() {
     this.timerSubscription = this.gameTimer.subscribe(value => {
+      if (!document.hasFocus() && !this.focusLost) {
+        this.focusLost = true;
+        let focusLostInfo = {
+          moment: new Date(),
+          secondsPlayed: this.secondsPlayed
+        }
+        window.localStorage.setItem("focusLostInfo", JSON.stringify(focusLostInfo));
+      }
+      if (document.hasFocus() && this.focusLost && this.isMobile) {
+        let focusLostInfo = JSON.parse(window.localStorage.getItem("focusLostInfo"));
+        let secondsSinceFocusLost = Math.floor(
+          (new Date().getTime() - new Date(focusLostInfo.moment).getTime()) / 1000);
+
+        this.focusLost = false;
+        this.timerSubscription.unsubscribe();
+        this.setClock(focusLostInfo.secondsPlayed + secondsSinceFocusLost);
+      }
+
       this.secondsPlayed++;
       this.seconds++;
       if (this.seconds === 60) {

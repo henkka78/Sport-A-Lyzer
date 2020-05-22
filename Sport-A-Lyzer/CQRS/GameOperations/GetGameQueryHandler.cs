@@ -31,6 +31,7 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 				.Include( g => g.HomeTeam )
 				.ThenInclude( t => t.Player )
 				.Include( g => g.GamePause )
+				.OrderBy( g => g.GameDay )
 				.Select( g => new GameFollowResponse()
 				{
 					Id = g.Id,
@@ -45,7 +46,7 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 					StartTime = g.StartTime,
 					ActualStartTime = g.ActualStartTime,
 					ActualEndTime = g.ActualEndTime,
-					Players = GetPlayers(g.HomeTeam, g.AwayTeam)
+					Players = GetPlayers( g.HomeTeam, g.AwayTeam )
 				} ).SingleOrDefaultAsync();
 
 			if ( game == null )
@@ -61,19 +62,11 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 			return game;
 		}
 
-		private static Dictionary<string, ICollection<PlayerResponse>> GetPlayers(Team homeTeam, Team awayTeam)
+		private static Dictionary<string, ICollection<PlayerResponse>> GetPlayers( Team homeTeam, Team awayTeam )
 		{
-			var result=new Dictionary<string, ICollection<PlayerResponse>>();
+			var result = new Dictionary<string, ICollection<PlayerResponse>>();
 
-			var homeTeamPlayers = homeTeam.Player.Select(p => new PlayerResponse()
-			{
-				FirstName = p.FirstName,
-				LastName = p.LastName,
-				PlayerId = p.Id,
-				PlayerNumber = p.Number
-			}).ToList();
-
-			var awayTeamPlayers=awayTeam.Player.Select( p => new PlayerResponse()
+			var homeTeamPlayers = homeTeam.Player.Select( p => new PlayerResponse()
 			{
 				FirstName = p.FirstName,
 				LastName = p.LastName,
@@ -81,8 +74,16 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 				PlayerNumber = p.Number
 			} ).ToList();
 
-			result.Add(homeTeam.Id.ToString(), homeTeamPlayers);
-			result.Add(awayTeam.Id.ToString(), awayTeamPlayers);
+			var awayTeamPlayers = awayTeam.Player.Select( p => new PlayerResponse()
+			{
+				FirstName = p.FirstName,
+				LastName = p.LastName,
+				PlayerId = p.Id,
+				PlayerNumber = p.Number
+			} ).ToList();
+
+			result.Add( homeTeam.Id.ToString(), homeTeamPlayers );
+			result.Add( awayTeam.Id.ToString(), awayTeamPlayers );
 
 			return result;
 		}
@@ -109,7 +110,7 @@ namespace Sport_A_Lyzer.CQRS.GameOperations
 
 				   return total;
 			   } );
-			   
+
 			var activePause = gamePauses.SingleOrDefault( gp => gp.EndTime == null );
 			if ( activePause != null )
 			{

@@ -22,6 +22,7 @@ import { GameFollowComponent } from './components/game-follow/game-follow.compon
 import { LoaderComponent } from './components/loader/loader.component';
 import { WhatsAppButtonComponent } from './components/whats-app-button/whats-app-button.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -55,6 +56,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     ClipboardModule,
+    DeviceDetectorModule.forRoot(),
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false }

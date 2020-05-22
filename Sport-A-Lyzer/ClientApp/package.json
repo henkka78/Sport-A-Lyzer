@@ -29,6 +29,7 @@
     "moment": "^2.24.0",
     "ng-uikit-pro-standard": "file:ng-uikit-pro-standard-8.6.0.tgz",
     "ngx-clipboard": "^13.0.0",
+    "ngx-device-detector": "^1.4.2",
     "rxjs": "~6.5.5",
     "screenfull": "3.3.x",
     "tslib": "^1.10.0",
