@@ -30,7 +30,7 @@ namespace Sport_A_Lyzer.Controllers
 
 	    [Route( "api/teams" )]
 	    [HttpGet]
-	    public async Task<ActionResult<ICollection<TeamResponse>>> GetTeamsAsync()
+	    public async Task<ActionResult<ICollection<TeamResponse>>> GetAsync()
 	    {
 		    var query = new GetTeamsQuery();
 		    var teams = await _getTeamsQueryHandler.HandleAsync( query );

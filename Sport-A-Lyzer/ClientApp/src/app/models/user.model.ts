@@ -5,5 +5,6 @@ export class User {
   firstName: string;
   lastName: string;
   token?: string;
-  roleId?:string;
+  roleId?: string;
+  organizationOptions?:string;
 }

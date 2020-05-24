@@ -25,15 +25,6 @@ namespace Sport_A_Lyzer.Controllers
 			_getTournamentsByYearQueryHandler = getTournamentsByYearQueryHandler;
 		}
 
-		[Route( "api/tournaments/{tournamentId}/games" )]
-		[HttpGet]
-		public async Task<ActionResult<ICollection<GameFollowResponse>>> GetTournamentGamesAsync( Guid? tournamentId )
-		{
-			var query = new GetGamesByTournamentIdQuery( tournamentId );
-			var games = await _getGamesByTournamentIdQueryHandler.HandleAsync( query );
-			return Ok( games );
-		}
-
 		[Route( "api/years/{year}/tournaments" )]
 		[HttpGet]
 		public async Task<ActionResult<ICollection<TournamentResponse>>> GetTournamentsByYearAsync( int year )

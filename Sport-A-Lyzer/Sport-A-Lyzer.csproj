@@ -38,10 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="DependencyInjection\Bootstrap.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="ClientApp\tsconfig.json" />
   </ItemGroup>
 

@@ -10,6 +10,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { UserService } from "../../services/user.service";
+import { AuthenticationService } from "../../services/authentication.service";
 
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -41,10 +43,70 @@ export class GameFollowComponent implements OnInit {
   public goalScored: boolean;
   private focusLost: boolean;
   private isMobile: boolean;
+  public optionsSet: boolean;
+  private organizationOptions: any;
+  public gameYearSelections: any = {
+    months: [
+      {
+        value: 1,
+        label: "Tammikuu"
+      },
+      {
+        value: 2,
+        label: "Helmikuu"
+      },
+      {
+        value: 3,
+        label: "Maaliskuu"
+      },
+      {
+        value: 4,
+        label: "Huhtikuu"
+      },
+      {
+        value: 5,
+        label: "Toukokuu"
+      },
+      {
+        value: 6,
+        label: "Kesäkuu"
+      },
+      {
+        value: 7,
+        label: "Heinäkuu"
+      },
+      {
+        value: 8,
+        label: "Elokuu"
+      },
+      {
+        value: 9,
+        label: "Syyskuu"
+      },
+      {
+        value: 10,
+        label: "Lokakuu"
+      },
+      {
+        value: 11,
+        label: "Marraskuu"
+      },
+      {
+        value: 12,
+        label: "Joulukuu"
+      }
+    ],
+    years: []
+  };
+  private gamesReguest = {
+    Year: null,
+    Month:null
+  };
+
   public scorer: any = {
     scorerId: null,
     scorerName: null
-  }
+  };
   public goals = {
     home: 0,
     away: 0,
@@ -59,25 +121,51 @@ export class GameFollowComponent implements OnInit {
 
   public scorerSet: boolean;
   public gameSelectForm: FormGroup;
-  public whatAppHref: string;
   constructor(
     private gameService: GameService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private clipboardService: ClipboardService,
     private toastService: ToastService,
-    private deviceService: DeviceDetectorService
+    private deviceService: DeviceDetectorService,
+    private authService: AuthenticationService
   ) { }
 
   ngOnInit() {
     this.isMobile = this.deviceService.isMobile();
-    this.loadGameList();
-
+    this.organizationOptions = JSON.parse(this.authService.currentUserValue.organizationOptions);
+    console.log(this.organizationOptions);
+    this.setYears(this.organizationOptions);
+    console.log(this.gameYearSelections);
+    //this.loadGameList();
   }
 
+  private setYears(options: any): void {
+    for (let i = 0; i < options.yearsToShow; i++) {
+      this.gameYearSelections.years.push({
+        value: options.firstUsageYear + i,
+        label: options.firstUsageYear + i
+      });
+    }
+    this.optionsSet = true;
+  }
+
+  public yearSelect(event): void {
+    this.gamesReguest.Year = event.value;
+    if (this.gamesReguest.Month != null) {
+      this.loadGameList();
+    }
+  }
+
+  public monthSelect(event): void {
+    this.gamesReguest.Month = event.value;
+    if (this.gamesReguest.Year != null) {
+      this.loadGameList();
+    }
+  }
 
   private loadGameList(): void {
-    this.gameService.getGamesByTournamentId().subscribe(results => {
+    this.gameService.getNonTournamentGamesByTimeLimit(this.gamesReguest).subscribe(results => {
       this.games = [];
       this.endedGames = [];
       results.forEach(result => {
@@ -85,7 +173,7 @@ export class GameFollowComponent implements OnInit {
         let gameObject = {
           value: result.id,
           label: (result.gameDay != null ? formatDate(result.gameDay, "d.M", "en-EN") + "  :  " : "") + result.homeTeamName + " - " + result.awayTeamName
-        }
+        };
         if (result.actualEndTime === null) {
           this.games.push(gameObject);
         } else {
@@ -218,12 +306,12 @@ export class GameFollowComponent implements OnInit {
       playerId: null,
       gameId: this.currentGame.id
 
-    }
+    };
     this.goalScored = true;
     this.scorer = {
       scorerId: null,
       scorerName: null
-    }
+    };
     this.scorerModal.show();
   }
 
@@ -280,7 +368,7 @@ export class GameFollowComponent implements OnInit {
         let focusLostInfo = {
           moment: new Date(),
           secondsPlayed: this.secondsPlayed
-        }
+        };
         window.localStorage.setItem("focusLostInfo", JSON.stringify(focusLostInfo));
       }
       if (document.hasFocus() && this.focusLost && this.isMobile) {

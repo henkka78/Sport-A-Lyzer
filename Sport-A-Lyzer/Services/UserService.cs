@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Sport_A_Lyzer.Extensions;
 using Sport_A_Lyzer.Helpers;
 using Sport_A_Lyzer.Models;
+using Sport_A_Lyzer.Services.Models;
 
 namespace Sport_A_Lyzer.Services
 {
@@ -28,7 +29,7 @@ namespace Sport_A_Lyzer.Services
 			_appSettings = appSettings.Value;
 		}
 
-		public async Task<User> Authenticate( string username, string password )
+		public async Task<UserResponse> Authenticate( string username, string password )
 		{
 			var user = await GetUser( username );
 
@@ -56,12 +57,14 @@ namespace Sport_A_Lyzer.Services
 			var token = tokenHandler.CreateToken( tokenDescriptor );
 			user.Token = tokenHandler.WriteToken( token );
 
-			return user.WithoutPassword();
+			return user.ConvertToUserResponse();
 		}
 
 		private async Task<User> GetUser( string userName )
 		{
-			return await _context.User.SingleOrDefaultAsync( u => u.UserName.ToLower() == userName.ToLower() );
+			return await _context.User
+				.Include( u => u.Organization )
+				.SingleOrDefaultAsync( u => u.UserName.ToLower() == userName.ToLower() );
 		}
 
 		private static bool VerifyPassword( User user, string password )

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sport_A_Lyzer.Models
 {
-    public partial class Organization
+    public sealed partial class Organization
     {
         public Organization()
         {
@@ -14,8 +14,9 @@ namespace Sport_A_Lyzer.Models
         public string Name { get; set; }
         public string HometownId { get; set; }
         public string Description { get; set; }
+        public string Options { get; set; }
 
-        public virtual Town Hometown { get; set; }
-        public virtual ICollection<User> User { get; set; }
+        public Town Hometown { get; set; }
+        public ICollection<User> User { get; set; }
     }
 }

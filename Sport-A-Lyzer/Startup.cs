@@ -16,7 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Sport_A_Lyzer.CQRS;
-using Sport_A_Lyzer.DependencyInjection;
+using Sport_A_Lyzer.Extensions;
 using Sport_A_Lyzer.Helpers;
 using Sport_A_Lyzer.Models;
 using Sport_A_Lyzer.Services;

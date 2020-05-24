@@ -19,6 +19,10 @@ export class GameService {
     return this.httpClient.get<Game[]>(`${this.baseUrl}/api/games`);
   }
 
+  getNonTournamentGamesByTimeLimit(request: any): Observable<Game[]> {
+    return this.httpClient.get<Game[]>(`${this.baseUrl}/api/games/non-tournament-games-by-time-limit?year=${request.Year}&month=${request.Month}`);
+  }
+
   upsertGame(gameId: string, data: any) {
     return this.httpClient.put(`${this.baseUrl}/api/games/${gameId}`, data);
   }

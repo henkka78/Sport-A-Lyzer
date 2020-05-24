@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Sport_A_Lyzer.DependencyInjection
+namespace Sport_A_Lyzer.Extensions
 {
 	public static class CqrsExtensions
 	{

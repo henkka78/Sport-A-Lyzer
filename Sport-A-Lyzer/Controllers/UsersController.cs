@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sport_A_Lyzer.Models;
 using Sport_A_Lyzer.Services;
+using Sport_A_Lyzer.Services.Models;
 
 namespace Sport_A_Lyzer.Controllers
 {

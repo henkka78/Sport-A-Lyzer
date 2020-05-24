@@ -19,6 +19,7 @@ namespace Sport_A_Lyzer.Controllers
 		private readonly IQueryHandler<GetGamesGoalStatsQuery, ICollection<GoalStatsResponse>> _getGamesGoalStatsQueryHandler;
 		private readonly ICommandHandler<UpsertGoalCommand> _upsertGoalCommandHandler;
 		private readonly ICommandHandler<SetGamePauseStatusCommand> _setGamePauseStatusCommandHandler;
+		private readonly IQueryHandler<GetNonTournamentGamesByTimeLimitQuery, ICollection<GameResponse>> _getNonTournamentGamesByTimeLimitQueryHandler;
 		private readonly IQueryHandler<GetGamesByTournamentIdQuery, ICollection<GameResponse>> _getGamesByTournamentIdQueryHandler;
 		private readonly ICommandHandler<StartGameCommand> _startGameCommandHandler;
 		private readonly ICommandHandler<EndGameCommand> _endGameCommandHandler;
@@ -32,7 +33,8 @@ namespace Sport_A_Lyzer.Controllers
 			IQueryHandler<GetGamesByTournamentIdQuery, ICollection<GameResponse>> getGamesByTournamentIdQueryHandler,
 			ICommandHandler<StartGameCommand> startGameCommandHandler,
 			ICommandHandler<EndGameCommand> endGameCommandHandler,
-			ICommandHandler<SetGamePauseStatusCommand> setGamePauseStatusCommandHandler
+			ICommandHandler<SetGamePauseStatusCommand> setGamePauseStatusCommandHandler,
+			IQueryHandler<GetNonTournamentGamesByTimeLimitQuery, ICollection<GameResponse>> getNonTournamentGamesByTimeLimitQueryHandler
 			)
 		{
 			_upsertGameCommandHandler = upsertGameCommandHandler;
@@ -44,6 +46,7 @@ namespace Sport_A_Lyzer.Controllers
 			_startGameCommandHandler = startGameCommandHandler;
 			_endGameCommandHandler = endGameCommandHandler;
 			_setGamePauseStatusCommandHandler = setGamePauseStatusCommandHandler;
+			_getNonTournamentGamesByTimeLimitQueryHandler = getNonTournamentGamesByTimeLimitQueryHandler;
 		}
 
 		[Route( "api/games/{gameId}" )]
@@ -55,11 +58,20 @@ namespace Sport_A_Lyzer.Controllers
 			return Ok( game );
 		}
 
-		[Route( "api/games" )]
+		[Route( "api/games/non-tournament-games-by-time-limit" )]
 		[HttpGet]
-		public async Task<ActionResult<ICollection<GameResponse>>> GetGamesAsync()
+		public async Task<ActionResult<ICollection<GameResponse>>> GetGamesAsync(int year, int month)
 		{
-			var query = new GetGamesByTournamentIdQuery( null );
+			var query = new GetNonTournamentGamesByTimeLimitQuery(year, month);
+			var games = await _getNonTournamentGamesByTimeLimitQueryHandler.HandleAsync( query );
+			return Ok( games );
+		}
+
+		[Route( "api/tournaments/{tournamentId}/games" )]
+		[HttpGet]
+		public async Task<ActionResult<ICollection<GameFollowResponse>>> GetTournamentGamesAsync( Guid? tournamentId )
+		{
+			var query = new GetGamesByTournamentIdQuery( tournamentId );
 			var games = await _getGamesByTournamentIdQueryHandler.HandleAsync( query );
 			return Ok( games );
 		}

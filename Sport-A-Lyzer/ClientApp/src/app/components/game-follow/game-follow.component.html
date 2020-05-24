@@ -1,6 +1,9 @@
 <div class="col-lg-4 col-sm-12 text-center jumbotron grey lighten-2">
-  <div class="md-form mt-3 mb-5" *ngIf="gamesLoaded && !gameSelected">
-    <form [formGroup]="gameSelectForm">
+  <div class="md-form mt-3 mb-5" *ngIf="optionsSet && !gameSelected">
+    <mdb-select [options]="gameYearSelections.years" [visibleOptions]="4" placeholder="Valitse vuosi" (selected)="yearSelect($event)"></mdb-select>
+    <mdb-select [options]="gameYearSelections.months" [visibleOptions]="12" placeholder="Valitse kuukausi" (selected)="monthSelect($event)"></mdb-select>
+    <form [formGroup]="gameSelectForm" *ngIf="gamesLoaded">
+
       <mdb-select [options]="games" [visibleOptions]="8" placeholder="Valitse seurattava peli" formControlName="gameSelect" (selected)="gameSelect($event)"></mdb-select>
       <mdb-select [options]="endedGames" [visibleOptions]="8" placeholder="Valitse pelattu peli" formControlName="gameSelect" (selected)="gameSelect($event)"></mdb-select>
     </form>
