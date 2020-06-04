@@ -23,6 +23,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { WhatsAppButtonComponent } from './components/whats-app-button/whats-app-button.component';
 import { ClipboardModule } from 'ngx-clipboard';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { TimerComponent } from './components/timer/timer.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -31,7 +32,8 @@ const appRoutes: Routes = [
   { path: 'game-follow', component: GameFollowComponent, canActivate: [AuthGuard] },
   { path: 'user-control', component: UserControlComponent, canActivate: [AuthGuard] },
   { path: 'register', component: UserControlComponent },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: 'analyzer', loadChildren: () => import('./analyzer/analyzer.module').then(m => m.AnalyzerModule) }
 ];
 
 @NgModule({
@@ -47,7 +49,8 @@ const appRoutes: Routes = [
     UserControlComponent,
     GameFollowComponent,
     LoaderComponent,
-    WhatsAppButtonComponent
+    WhatsAppButtonComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule,

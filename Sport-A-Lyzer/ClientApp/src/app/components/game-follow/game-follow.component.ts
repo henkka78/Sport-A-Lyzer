@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { GameService } from '../../services/game.service';
 import { Game } from '../../models/game.model';
-import { timer } from 'rxjs';
+import { timer, Subject } from 'rxjs';
 import { Goal } from "../../models/goal.model";
 import { ModalDirective, ToastService } from 'ng-uikit-pro-standard';
 import { UUID } from 'angular2-uuid';
@@ -13,7 +13,6 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { UserService } from "../../services/user.service";
 import { AuthenticationService } from "../../services/authentication.service";
 
-const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 @Component({
   selector: 'app-game-follow',
@@ -45,6 +44,7 @@ export class GameFollowComponent implements OnInit {
   private isMobile: boolean;
   public optionsSet: boolean;
   private organizationOptions: any;
+  public startClockSubject: Subject<void> = new Subject<void>();
   public gameYearSelections: any = {
     months: [
       {
@@ -362,32 +362,6 @@ export class GameFollowComponent implements OnInit {
   }
 
   private startClock() {
-    this.timerSubscription = this.gameTimer.subscribe(value => {
-      if (!document.hasFocus() && !this.focusLost) {
-        this.focusLost = true;
-        let focusLostInfo = {
-          moment: new Date(),
-          secondsPlayed: this.secondsPlayed
-        };
-        window.localStorage.setItem("focusLostInfo", JSON.stringify(focusLostInfo));
-      }
-      if (document.hasFocus() && this.focusLost && this.isMobile) {
-        let focusLostInfo = JSON.parse(window.localStorage.getItem("focusLostInfo"));
-        let secondsSinceFocusLost = Math.floor(
-          (new Date().getTime() - new Date(focusLostInfo.moment).getTime()) / 1000);
-
-        this.focusLost = false;
-        this.timerSubscription.unsubscribe();
-        this.setClock(focusLostInfo.secondsPlayed + secondsSinceFocusLost);
-      }
-
-      this.secondsPlayed++;
-      this.seconds++;
-      if (this.seconds === 60) {
-        this.minutes++;
-        this.seconds = 0;
-      }
-      this.secondsString = this.seconds.toString().padStart(2, "0");
-    });
+    this.startClockSubject.next();
   }
 }
