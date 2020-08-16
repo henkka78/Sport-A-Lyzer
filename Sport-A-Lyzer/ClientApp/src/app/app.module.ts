@@ -33,7 +33,7 @@ const appRoutes: Routes = [
   { path: 'user-control', component: UserControlComponent, canActivate: [AuthGuard] },
   { path: 'register', component: UserControlComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'analyzer', loadChildren: () => import('./analyzer/analyzer.module').then(m => m.AnalyzerModule) }
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
 ];
 
 @NgModule({

@@ -26,8 +26,8 @@ namespace Sport_A_Lyzer.Extensions
 				FirstName = user.FirstName,
 				LastName = user.LastName,
 				UserName = user.UserName,
-				Organization = user.Organization.Name,
-				OrganizationOptions = user.Organization.Options,
+				Organization = user.Organization?.Name,
+				OrganizationOptions = user.Organization?.Options,
 				RoleId = user.RoleId,
 				Token = user.Token
 			};

@@ -92,6 +92,7 @@
     <None Include="Scripts\StaticData\Role.sql" />
     <None Include="Scripts\StaticData\User.sql" />
     <None Include="PublishProfiles\Winhost_AppDatabase.publish.xml" />
+    <None Include="PublishProfiles\LocalDb_AppDataBase_musakone.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
